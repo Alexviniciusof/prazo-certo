@@ -1,0 +1,29 @@
+# Configuração do deploy no Render (Blueprint).
+# Cria o site (web service) e o banco PostgreSQL, já ligados um ao outro.
+services:
+  - type: web
+    name: prazo-certo
+    runtime: python
+    plan: free
+    rootDir: situacao2
+    buildCommand: pip install -r requirements.txt && pytest -q
+    startCommand: gunicorn run:app --bind 0.0.0.0:$PORT
+    healthCheckPath: /projetos
+    autoDeploy: true
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: prazo-certo-db
+          property: connectionString
+
+databases:
+  - name: prazo-certo-db
+    plan: free
+    databaseName: prazo_certo
+    user: prazo_certo

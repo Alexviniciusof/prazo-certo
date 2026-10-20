@@ -26,7 +26,7 @@ pip install -r requirements.txt
 cp .env.example .env
 flask --app run popular-exemplo   # opcional: dados de exemplo
 flask --app run run               # abre em http://127.0.0.1:5000
-pytest                            # roda os 66 testes
+pytest                            # roda os 72 testes
 ```
 
 Instalação detalhada, configuração do banco e **manual de uso** em [`situacao2/README.md`](situacao2/README.md).

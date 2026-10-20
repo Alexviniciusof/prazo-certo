@@ -9,12 +9,20 @@ from pathlib import Path
 PASTA_INSTANCIA = Path(__file__).resolve().parent.parent / "instance"
 
 
-def _url_do_banco(padrao):
-    url = os.environ.get("DATABASE_URL") or padrao
-    # Alguns serviços de hospedagem entregam "postgres://", que o SQLAlchemy não aceita.
-    if url.startswith("postgres://"):
-        url = url.replace("postgres://", "postgresql://", 1)
+def normalizar_url_do_banco(url):
+    """Ajusta o endereço do PostgreSQL para usar o driver psycopg (versão 3).
+
+    Serviços de hospedagem (como o Render) entregam "postgres://..." ou "postgresql://...";
+    o SQLAlchemy precisa de "postgresql+psycopg://..." para usar o driver instalado.
+    """
+    for prefixo in ("postgres://", "postgresql://"):
+        if url.startswith(prefixo):
+            return "postgresql+psycopg://" + url[len(prefixo):]
     return url
+
+
+def _url_do_banco(padrao):
+    return normalizar_url_do_banco(os.environ.get("DATABASE_URL") or padrao)
 
 
 class Config:
@@ -42,7 +50,11 @@ class TestingConfig(Config):
     def __init__(self):
         super().__init__()
         self.SECRET_KEY = "chave-usada-somente-nos-testes"
-        self.SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
+        # Por padrão os testes usam SQLite em memória. Para rodá-los no PostgreSQL,
+        # defina TEST_DATABASE_URL apontando para um banco vazio de testes.
+        self.SQLALCHEMY_DATABASE_URI = normalizar_url_do_banco(
+            os.environ.get("TEST_DATABASE_URL") or "sqlite:///:memory:"
+        )
 
 
 class ProductionConfig(Config):

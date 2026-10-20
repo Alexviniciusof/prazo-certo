@@ -62,15 +62,16 @@ E acesse `http://<IP-do-computador>:5000`.
 pytest
 ```
 
-São **66 testes automatizados** em `tests/`, e cada um usa um banco novo, em memória:
+São **72 testes automatizados** em `tests/`, e cada um usa um banco novo, em memória:
 
 | Arquivo | O que testa |
 |---|---|
 | `test_projetos.py` | Criar, listar, editar e excluir projetos; nome obrigatório e único; excluir projeto apaga as tarefas; cálculo do progresso |
 | `test_tarefas.py` | Criar tarefa; não aceitar tarefa sem título; prazo válido; concluir e desmarcar; ordem da lista; listar só as atrasadas |
+| `test_config.py` | Endereço do banco ajustado para o driver certo; produção não sobe sem `SECRET_KEY` |
 | `test_rotas.py` | Páginas e formulários: mensagens de sucesso e de erro, filtro de atrasadas, resposta JSON para o JavaScript, página 404 e erro de banco sem mostrar detalhe técnico |
 
-Resultado esperado: `66 passed`.
+Resultado esperado: `72 passed`.
 
 ## 4. Configuração (variáveis de ambiente)
 
@@ -106,8 +107,32 @@ As tabelas são criadas automaticamente quando o sistema inicia. Não é preciso
 ### Rodar em produção
 
 ```bash
-pip install gunicorn
-APP_ENV=production SECRET_KEY=<sua-chave> DATABASE_URL=<seu-banco> gunicorn "run:app"
+APP_ENV=production SECRET_KEY=<sua-chave> DATABASE_URL=<seu-banco> gunicorn run:app
+```
+
+### Publicar no Render
+
+O arquivo [`render.yaml`](../render.yaml), na raiz do repositório, descreve tudo o que o Render precisa:
+um site Python (plano grátis) e um banco PostgreSQL (plano grátis), já ligados um ao outro.
+A `SECRET_KEY` é gerada pelo próprio Render.
+
+1. Clique em [**Deploy to Render**](https://render.com/deploy?repo=https://github.com/Alexviniciusof/prazo-certo) e entre com a conta do GitHub.
+2. Confirme em **Deploy Blueprint**.
+3. Aguarde o build. **Os testes rodam durante o build**: se algum falhar, a versão nova não entra no ar.
+
+Depois disso, cada `git push` na branch `main` publica a versão nova sozinho.
+
+Limites do plano grátis do Render:
+- O site "dorme" depois de 15 minutos sem acesso. O primeiro acesso depois disso demora uns 50 segundos.
+- O banco PostgreSQL grátis **expira 30 dias depois de criado**. Para manter o sistema no ar por mais tempo,
+  troque o `DATABASE_URL` por um banco grátis permanente (por exemplo, Neon) ou mude para um plano pago.
+
+### Rodar os testes no PostgreSQL
+
+Por padrão os testes usam SQLite em memória. Para testar no PostgreSQL, crie um banco vazio e rode:
+
+```bash
+TEST_DATABASE_URL=postgresql://usuario:senha@localhost:5432/prazo_certo_testes pytest
 ```
 
 ## 5. Manual de uso

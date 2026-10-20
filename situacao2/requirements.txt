@@ -4,7 +4,7 @@ SQLAlchemy==2.1.5
 python-dotenv==1.2.4
 pytest==9.1.1
 
-# Produção (Render ou outro servidor)
+# Produção (Vercel usa o psycopg; o gunicorn serve para rodar em um servidor próprio)
 gunicorn==26.2.0
 psycopg[binary]==3.3.6   # driver do PostgreSQL
 

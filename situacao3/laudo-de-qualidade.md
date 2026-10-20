@@ -4,7 +4,7 @@
 |---|---|
 | **Sistema** | Prazo Certo — gerenciador de tarefas por projeto |
 | **Versão avaliada** | commit `________` (preencher com a versão testada pelos colegas) |
-| **Endereço** | https://prazo-certo.onrender.com |
+| **Endereço** | https://prazo-certo-rouge.vercel.app |
 | **Período dos testes** | __/__/2026 a __/__/2026 |
 | **Responsável** | Alex Lima |
 
@@ -32,7 +32,9 @@ de antes e depois, conforme pedido na Situação 3.
 |---|---|---|---|---|---|---|
 | E01 | Texto "1 atrasada(s)" e "0 de 0 tarefas concluídas" em projeto sem tarefas | Baixa | Lista de projetos e página do projeto | Plural automático e texto "Nenhuma tarefa ainda" | commit `725c03e` | ✅ Corrigido |
 | E02 | Com `DATABASE_URL` vazio no `.env`, o sistema não iniciava | Média | Configuração | Variável vazia passa a usar o SQLite padrão | commit `4a6e5ad` | ✅ Corrigido |
-| E03 | O endereço do PostgreSQL entregue pelo Render (`postgresql://`) não usaria o driver instalado (identificado antes do primeiro deploy) | Alta (só em produção) | Configuração | Função `normalizar_url_do_banco` + 5 testes em `test_config.py` | commit `f4c3b22` | ✅ Corrigido |
+| E03 | O endereço do PostgreSQL entregue pela hospedagem (`postgresql://`) não usaria o driver instalado (identificado antes do primeiro deploy) | Alta (só em produção) | Configuração | Função `normalizar_url_do_banco` + 5 testes em `test_config.py` | commit `f4c3b22` | ✅ Corrigido |
+| E04 | No Render grátis, o site "dormia" após 15 min (primeiro acesso com ~50 s de espera), o banco expiraria em 30 dias e uma publicação travou esperando aprovação manual | Média | Hospedagem | Mudança para Vercel + Neon (publica em segundos, não dorme, banco sem prazo) | commit `49816a3` | ✅ Corrigido |
+| E05 | Na Vercel, a variável `APP_ENV` foi cadastrada com o valor errado ("productionproduction") e o site respondia erro 500 | Alta | Configuração da hospedagem | Variável corrigida; o erro foi achado nos logs da Vercel e o roteiro de testes foi repetido no site | logs da Vercel de 20/10/2026 | ✅ Corrigido |
 
 ### 4.2 Encontrados pelos colegas
 | ID | Descrição | Quem encontrou | Gravidade | Correção | Evidência (antes / depois) | Status |

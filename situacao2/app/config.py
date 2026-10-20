@@ -12,7 +12,7 @@ PASTA_INSTANCIA = Path(__file__).resolve().parent.parent / "instance"
 def normalizar_url_do_banco(url):
     """Ajusta o endereço do PostgreSQL para usar o driver psycopg (versão 3).
 
-    Serviços de hospedagem (como o Render) entregam "postgres://..." ou "postgresql://...";
+    Serviços de hospedagem (como Neon, Render e Heroku) entregam "postgres://..." ou "postgresql://...";
     o SQLAlchemy precisa de "postgresql+psycopg://..." para usar o driver instalado.
     """
     for prefixo in ("postgres://", "postgresql://"):

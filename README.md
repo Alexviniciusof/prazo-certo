@@ -2,8 +2,7 @@
 
 Projeto da disciplina **Projeto Integrador Transdisciplinar em Engenharia de Software II**.
 
-**🌐 Sistema no ar: https://prazo-certo.onrender.com**
-(plano grátis: o primeiro acesso depois de um tempo parado pode demorar uns 50 segundos)
+**🌐 Sistema no ar: https://prazo-certo-rouge.vercel.app**
 
 Sistema web em que o usuário cadastra projetos, cadastra tarefas dentro de cada projeto,
 marca tarefas como concluídas e acompanha o progresso e os atrasos.

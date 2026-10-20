@@ -18,7 +18,7 @@ Seguindo o **Modelo V** do material da disciplina: cada nível de desenvolviment
   ============================== 93 passed ==============================
   ```
 - **Os mesmos testes no PostgreSQL** (o banco de produção): `TEST_DATABASE_URL=postgresql://... pytest` → todos passando.
-- **Testes no deploy:** o Render roda `pytest` antes de publicar. Se algum teste falhar, a versão nova não entra no ar.
+- **Teste no ambiente publicado:** depois de cada publicação na Vercel, o [roteiro de testes](roteiro-de-testes.md) é repetido no site.
 - **Revisão contra a documentação:** as regras do [dicionário de dados](../situacao1/dicionario-de-dados.md)
   (tamanhos, campos obrigatórios, nome único, cascata) têm um teste cada.
 

@@ -1,6 +1,6 @@
 # Roteiro de testes do sistema
 
-Casos de teste manuais, feitos no sistema publicado (https://prazo-certo.onrender.com) e no navegador.
+Casos de teste manuais, feitos no sistema publicado (https://prazo-certo-rouge.vercel.app) e no navegador.
 Servem também de guia para os colegas. Cada caso aponta o requisito (RF) e o caso de uso (UC) que testa.
 
 **Legenda do resultado:** ✅ passou · ❌ falhou · ⏳ ainda não executado
@@ -24,9 +24,10 @@ Servem também de guia para os colegas. Cada caso aponta o requisito (RF) e o ca
 | CT15 | RF7 | Abrir um projeto que não existe (ex.: `/projetos/999999`) | Página "Projeto não encontrado." com botão para voltar, sem erro técnico | ✅ |
 | CT16 | — | Abrir o sistema no celular | Layout se ajusta à tela, sem rolagem lateral | ✅ |
 | CT17 | — | Usar o aparelho no modo escuro | Sistema aparece com cores escuras | ✅ |
-| CT18 | Situação 3 | Enviar o formulário de avaliação com um print | Página "Avaliação enviada" e a avaliação aparece em `/avaliacoes?chave=...` | ✅ (local) |
+| CT18 | Situação 3 | Enviar o formulário de avaliação com um print | Página "Avaliação enviada" e a avaliação aparece em `/avaliacoes?chave=...` | ✅ |
 
-**Como foram executados:** CT01 a CT15 foram executados no site publicado (Render + PostgreSQL),
-por requisições HTTP e no navegador. CT16 e CT17 foram conferidos por capturas de tela (ver
-`situacao1/prototipo/3-celular.png` e `8-modo-escuro.png`). CT18 foi executado na versão local e deve
-ser repetido no site publicado.
+**Como foram executados (20/10/2026):**
+- No site publicado (Vercel + Neon), por requisições HTTP: CT01, CT02, CT04 a CT09, CT11, CT13, CT14 e CT15.
+- No site publicado, pelo navegador: CT18 (com uma foto de 2,3 MB, reduzida no navegador para 209 KB antes do envio).
+- Na versão local, pelo navegador: CT03 (validação antes de enviar), CT10 (50% com 4 tarefas) e CT12.
+- Por capturas de tela: CT16 e CT17 (ver `situacao1/prototipo/3-celular.png` e `8-modo-escuro.png`).

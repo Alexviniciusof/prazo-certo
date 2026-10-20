@@ -106,28 +106,36 @@ DATABASE_URL=mysql+pymysql://usuario:senha@localhost:3306/prazo_certo
 
 As tabelas são criadas automaticamente quando o sistema inicia. Não é preciso mudar nada no código.
 
-### Rodar em produção
+### Rodar em produção em um servidor próprio
 
 ```bash
 APP_ENV=production SECRET_KEY=<sua-chave> DATABASE_URL=<seu-banco> gunicorn run:app
 ```
 
-### Publicar no Render
+### Publicar na Vercel (como está hoje)
 
-O arquivo [`render.yaml`](../render.yaml), na raiz do repositório, descreve tudo o que o Render precisa:
-um site Python (plano grátis) e um banco PostgreSQL (plano grátis), já ligados um ao outro.
-A `SECRET_KEY` é gerada pelo próprio Render.
+O sistema está hospedado na **Vercel**, com banco **Neon** (PostgreSQL), em https://prazo-certo-rouge.vercel.app.
 
-1. Clique em [**Deploy to Render**](https://render.com/deploy?repo=https://github.com/Alexviniciusof/prazo-certo) e entre com a conta do GitHub.
-2. Confirme em **Deploy Blueprint**.
-3. Aguarde o build. **Os testes rodam durante o build**: se algum falhar, a versão nova não entra no ar.
+- O projeto da Vercel está ligado a este repositório do GitHub, com **Root Directory = `situacao2`**
+  e o preset **Flask**. A Vercel usa o arquivo [`index.py`](index.py) como ponto de entrada.
+- O banco Neon foi criado pela própria Vercel (Marketplace), que já preenche o `DATABASE_URL`.
+- `APP_ENV`, `SECRET_KEY` e `AVALIACOES_CHAVE` ficam em **Settings → Environment Variables** do projeto.
+- **Cada `git push` na branch `main` publica a versão nova em segundos.**
 
-Depois disso, cada `git push` na branch `main` publica a versão nova sozinho.
+Para montar do zero em outra conta:
 
-Limites do plano grátis do Render:
-- O site "dorme" depois de 15 minutos sem acesso. O primeiro acesso depois disso demora uns 50 segundos.
-- O banco PostgreSQL grátis **expira 30 dias depois de criado**. Para manter o sistema no ar por mais tempo,
-  troque o `DATABASE_URL` por um banco grátis permanente (por exemplo, Neon) ou mude para um plano pago.
+```bash
+npm i -g vercel
+vercel link                      # na raiz do repositório; escolha Root Directory = situacao2
+vercel integration add neon      # cria o banco e o DATABASE_URL
+vercel env add SECRET_KEY production
+vercel env add APP_ENV production          # valor: production
+vercel env add AVALIACOES_CHAVE production
+vercel deploy --prod
+```
+
+Limite da Vercel: cada requisição aceita até 4,5 MB. Por isso os prints do formulário de avaliação
+são reduzidos no navegador e cada um pode ter até 1 MB.
 
 ### Rodar os testes no PostgreSQL
 

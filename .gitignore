@@ -10,3 +10,5 @@ instance/
 .coverage
 htmlcov/
 .DS_Store
+.vercel
+.env*

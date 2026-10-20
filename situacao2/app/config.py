@@ -27,8 +27,11 @@ def _url_do_banco(padrao):
 
 class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    # Limite do envio do formulário de avaliação (3 prints de até 3 MB + textos).
-    MAX_CONTENT_LENGTH = 12 * 1024 * 1024
+    # Limite do envio do formulário de avaliação (3 prints de até 1 MB + textos).
+    # Fica abaixo dos 4,5 MB que a Vercel aceita por requisição.
+    MAX_CONTENT_LENGTH = 4 * 1024 * 1024
+    # Em hospedagem serverless a conexão pode cair entre um acesso e outro; testa antes de usar.
+    SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}
     TESTING = False
     DEBUG = False
 

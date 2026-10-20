@@ -79,10 +79,10 @@ class TestRegras:
         with pytest.raises(ErroValidacao, match="no máximo 3"):
             avaliacoes.criar_avaliacao(dados_validos(), [("a.png", PNG)] * 4, hoje=hoje)
 
-    def test_print_maior_que_3_mb_e_recusado(self, app, hoje):
-        grande = PNG + b"0" * (3 * 1024 * 1024)
+    def test_print_maior_que_1_mb_e_recusado(self, app, hoje):
+        grande = PNG + b"0" * (1024 * 1024)
 
-        with pytest.raises(ErroValidacao, match="3 MB"):
+        with pytest.raises(ErroValidacao, match="1 MB"):
             avaliacoes.criar_avaliacao(dados_validos(), [("grande.png", grande)], hoje=hoje)
 
     def test_tipo_vem_do_conteudo_e_nao_do_nome(self, app, hoje):

@@ -49,9 +49,9 @@
       {% endfor %}
     </select>
 
-    <label for="prints">Prints das telas com erro <span class="opcional">(até 3 imagens de até 3 MB)</span></label>
+    <label for="prints">Prints das telas com erro <span class="opcional">(até 3 imagens; elas são reduzidas automaticamente)</span></label>
     <input id="prints" name="prints" type="file" accept="image/png,image/jpeg,image/gif,image/webp" multiple
-           data-max-arquivos="3" data-max-mb="3">
+           data-max-arquivos="3" data-max-mb="1">
     <div class="previas" id="previas" aria-live="polite"></div>
     {% if erro %}<p class="opcional">Se você tinha escolhido prints, escolha de novo antes de enviar.</p>{% endif %}
 

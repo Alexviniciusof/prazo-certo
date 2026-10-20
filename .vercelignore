@@ -1,0 +1,6 @@
+# O site usa só a pasta situacao2 (Root Directory na Vercel).
+**/.venv
+**/instance
+**/__pycache__
+**/.pytest_cache
+situacao2/.env

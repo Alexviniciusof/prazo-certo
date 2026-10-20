@@ -7,7 +7,8 @@ from app.models.erros import ErroNaoEncontrado, ErroValidacao
 from app.models.servicos import _converter_prazo, _texto_limpo, _transacao
 
 MAX_PRINTS = 3
-MAX_BYTES_PRINT = 3 * 1024 * 1024
+MAX_MB_PRINT = 1
+MAX_BYTES_PRINT = MAX_MB_PRINT * 1024 * 1024
 
 # Tipo da imagem descoberto pelos primeiros bytes do arquivo (não confiamos no nome nem no navegador).
 ASSINATURAS = (
@@ -72,7 +73,7 @@ def _validar_prints(arquivos):
     prints = []
     for nome, conteudo in arquivos:
         if len(conteudo) > MAX_BYTES_PRINT:
-            raise ErroValidacao(f"O print “{nome}” passa de 3 MB. Envie uma imagem menor.")
+            raise ErroValidacao(f"O print “{nome}” passa de {MAX_MB_PRINT} MB. Envie uma imagem menor.")
         tipo = _tipo_da_imagem(conteudo)
         if tipo is None:
             raise ErroValidacao(f"O arquivo “{nome}” não é uma imagem (use PNG, JPG, GIF ou WEBP).")

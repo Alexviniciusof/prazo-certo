@@ -178,36 +178,80 @@ window.addEventListener("pageshow", () => {
   document.querySelectorAll('button[type="submit"][disabled]').forEach((b) => { b.disabled = false; });
 });
 
-// Prévia e limite dos prints no formulário de avaliação.
+// Prints no formulário de avaliação: reduz cada imagem no navegador (até 1600 px, JPEG)
+// para caber no limite de envio, e mostra a prévia.
 (() => {
   const campo = document.querySelector("input[type=file][data-max-arquivos]");
   if (!campo) return;
   const previas = document.getElementById("previas");
   const maxArquivos = Number(campo.dataset.maxArquivos);
   const maxBytes = Number(campo.dataset.maxMb) * 1024 * 1024;
+  const LADO_MAXIMO = 1600;
 
-  campo.addEventListener("change", () => {
+  function carregarImagem(arquivo) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => { URL.revokeObjectURL(img.src); resolve(img); };
+      img.onerror = () => reject(new Error("imagem inválida"));
+      img.src = URL.createObjectURL(arquivo);
+    });
+  }
+
+  async function reduzir(arquivo) {
+    if (arquivo.size <= maxBytes && arquivo.type !== "image/png") return arquivo;
+    const img = await carregarImagem(arquivo);
+    const escala = Math.min(1, LADO_MAXIMO / Math.max(img.width, img.height));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(img.width * escala);
+    canvas.height = Math.round(img.height * escala);
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    for (const qualidade of [0.85, 0.7, 0.55, 0.4]) {
+      const blob = await new Promise((r) => canvas.toBlob(r, "image/jpeg", qualidade));
+      if (blob && blob.size <= maxBytes) {
+        const nome = arquivo.name.replace(/\.[^.]+$/, "") + ".jpg";
+        return new File([blob], nome, { type: "image/jpeg" });
+      }
+    }
+    throw new Error(`A imagem “${arquivo.name}” é grande demais mesmo reduzida.`);
+  }
+
+  function avisar(texto) {
+    const aviso = document.createElement("p");
+    aviso.className = "erro-campo";
+    aviso.textContent = texto;
+    previas.appendChild(aviso);
+  }
+
+  campo.addEventListener("change", async () => {
     previas.replaceChildren();
-    campo.setCustomValidity("");
     const arquivos = [...campo.files];
-    let problema = "";
-    if (arquivos.length > maxArquivos) problema = `Escolha no máximo ${maxArquivos} imagens.`;
-    const grande = arquivos.find((a) => a.size > maxBytes);
-    if (grande) problema = `A imagem “${grande.name}” passa de ${campo.dataset.maxMb} MB.`;
-    if (problema) {
+    if (arquivos.length > maxArquivos) {
       campo.value = "";
-      const aviso = document.createElement("p");
-      aviso.className = "erro-campo";
-      aviso.textContent = problema;
-      previas.appendChild(aviso);
+      avisar(`Escolha no máximo ${maxArquivos} imagens.`);
       return;
     }
-    arquivos.forEach((arquivo) => {
-      const img = document.createElement("img");
-      img.alt = arquivo.name;
-      img.src = URL.createObjectURL(arquivo);
-      img.onload = () => URL.revokeObjectURL(img.src);
-      previas.appendChild(img);
-    });
+    const botao = campo.form.querySelector('button[type="submit"]');
+    botao.disabled = true;
+    try {
+      const reduzidos = await Promise.all(arquivos.map(reduzir));
+      const transferencia = new DataTransfer();
+      reduzidos.forEach((arquivo) => transferencia.items.add(arquivo));
+      campo.files = transferencia.files;
+      reduzidos.forEach((arquivo) => {
+        const img = document.createElement("img");
+        img.alt = arquivo.name;
+        img.src = URL.createObjectURL(arquivo);
+        img.onload = () => URL.revokeObjectURL(img.src);
+        previas.appendChild(img);
+      });
+    } catch (erro) {
+      campo.value = "";
+      avisar(erro.message.startsWith("A imagem") ? erro.message : "Não foi possível ler uma das imagens. Tente outra.");
+    } finally {
+      botao.disabled = false;
+    }
   });
 })();

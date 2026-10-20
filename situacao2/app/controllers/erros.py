@@ -27,7 +27,7 @@ def registrar(app):
 
     @app.errorhandler(413)
     def envio_grande_demais(_erro):
-        return _responder("Os arquivos enviados são grandes demais. Envie prints de até 3 MB cada.", 413)
+        return _responder("Os arquivos enviados são grandes demais. Envie no máximo 3 prints de até 1 MB cada.", 413)
 
     @app.errorhandler(405)
     def metodo_nao_permitido(_erro):

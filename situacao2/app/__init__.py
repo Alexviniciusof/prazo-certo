@@ -15,7 +15,8 @@ def create_app(nome_config=None):
     app = Flask(__name__, instance_path=str(PASTA_INSTANCIA))
     app.config.from_object(CONFIGURACOES[nome_config]())
 
-    PASTA_INSTANCIA.mkdir(exist_ok=True)
+    if app.config["SQLALCHEMY_DATABASE_URI"].startswith("sqlite:///") and ":memory:" not in app.config["SQLALCHEMY_DATABASE_URI"]:
+        PASTA_INSTANCIA.mkdir(exist_ok=True)
     db.init_app(app)
 
     from app import comandos

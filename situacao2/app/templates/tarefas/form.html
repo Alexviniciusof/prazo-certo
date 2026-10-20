@@ -7,6 +7,8 @@
   <form class="cartao formulario" method="post" action="{{ url_for('tarefas.atualizar', tarefa_id=tarefa.id) }}">
     <label for="titulo">Título <span class="obrigatorio">*</span></label>
     <input id="titulo" name="titulo" type="text" maxlength="150" required autofocus
+           data-obrigatorio="Informe o título da tarefa."
+           {% if erro %}aria-invalid="true" aria-describedby="mensagens"{% endif %}
            value="{{ dados.get('titulo', '') }}">
 
     <label for="prazo">Prazo <span class="opcional">(opcional)</span></label>

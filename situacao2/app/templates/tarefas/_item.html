@@ -16,7 +16,7 @@
         <a href="{{ url_for('projetos.detalhar', projeto_id=tarefa.projeto_id) }}">{{ tarefa.projeto.nome }}</a> ·
       {% endif %}
       {% if tarefa.prazo %}Prazo: {{ tarefa.prazo | data_br }}{% else %}Sem prazo{% endif %}
-      {% if atrasada %}<span class="selo selo-atraso">Atrasada</span>{% endif %}
+      <span class="selo selo-atraso">Atrasada</span>
     </span>
   </div>
 

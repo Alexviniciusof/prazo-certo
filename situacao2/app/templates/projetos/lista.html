@@ -13,12 +13,16 @@
         <li class="cartao projeto">
           <a class="projeto-nome" href="{{ url_for('projetos.detalhar', projeto_id=projeto.id) }}">{{ projeto.nome }}</a>
           {% if projeto.descricao %}<p class="projeto-descricao">{{ projeto.descricao }}</p>{% endif %}
-          <div class="progresso" role="progressbar" aria-valuenow="{{ projeto.progresso }}" aria-valuemin="0" aria-valuemax="100">
+          <div class="progresso" role="progressbar" aria-label="Progresso de {{ projeto.nome }}" aria-valuenow="{{ projeto.progresso }}" aria-valuemin="0" aria-valuemax="100">
             <div class="progresso-barra" style="width: {{ projeto.progresso }}%"></div>
           </div>
           <p class="projeto-resumo">
-            <strong>{{ projeto.progresso }}%</strong> ·
-            {{ projeto.tarefas_concluidas }} de {{ projeto.total_tarefas }} tarefa{{ 's' if projeto.total_tarefas != 1 }} concluída{{ 's' if projeto.total_tarefas != 1 }}
+            {% if projeto.total_tarefas %}
+              <strong>{{ projeto.progresso }}%</strong> ·
+              {{ projeto.tarefas_concluidas }} de {{ projeto.total_tarefas }} tarefa{{ 's' if projeto.total_tarefas != 1 }} concluída{{ 's' if projeto.total_tarefas != 1 }}
+            {% else %}
+              Nenhuma tarefa ainda
+            {% endif %}
             {% if atrasadas %}· <span class="selo selo-atraso">{{ atrasadas }} atrasada{{ 's' if atrasadas != 1 }}</span>{% endif %}
           </p>
         </li>

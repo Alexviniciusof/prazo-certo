@@ -7,7 +7,7 @@
   {% if tarefas %}
     {% set mostrar_projeto = true %}
     {% set voltar_para = url_for('tarefas.atrasadas') %}
-    <ul class="lista-tarefas">
+    <ul class="lista-tarefas" data-remover-concluidas data-vazio="Nenhuma tarefa atrasada. Tudo em dia! 🎉">
       {% for tarefa in tarefas %}
         {% include "tarefas/_item.html" %}
       {% endfor %}

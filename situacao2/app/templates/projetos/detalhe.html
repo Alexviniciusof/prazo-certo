@@ -18,13 +18,14 @@
   </div>
 
   <section class="cartao" id="resumo-projeto">
-    <div class="progresso" role="progressbar" aria-valuenow="{{ projeto.progresso }}" aria-valuemin="0" aria-valuemax="100">
+    <div class="progresso" role="progressbar" aria-label="Progresso do projeto" data-barra aria-valuenow="{{ projeto.progresso }}" aria-valuemin="0" aria-valuemax="100">
       <div class="progresso-barra" style="width: {{ projeto.progresso }}%"></div>
     </div>
     <p class="projeto-resumo">
       <strong data-progresso>{{ projeto.progresso }}%</strong> concluído ·
       <span data-contagem>{{ projeto.tarefas_concluidas }} de {{ projeto.total_tarefas }}</span> tarefas ·
-      <span data-atrasadas>{{ projeto.total_atrasadas(hoje) }}</span> atrasada(s)
+      {% set atrasadas = projeto.total_atrasadas(hoje) %}
+      <span data-atrasadas>{{ atrasadas }} atrasada{{ 's' if atrasadas != 1 }}</span>
     </p>
   </section>
 
@@ -33,6 +34,8 @@
     <div class="campo campo-grande">
       <label for="titulo">Nova tarefa <span class="obrigatorio">*</span></label>
       <input id="titulo" name="titulo" type="text" maxlength="150" required
+             data-obrigatorio="Informe o título da tarefa."
+             {% if erro %}aria-invalid="true" aria-describedby="mensagens" autofocus{% endif %}
              placeholder="O que precisa ser feito?" value="{{ dados_tarefa.get('titulo', '') }}">
     </div>
     <div class="campo">
@@ -48,7 +51,7 @@
   </nav>
 
   {% if tarefas %}
-    <ul class="lista-tarefas">
+    <ul class="lista-tarefas" {% if filtro == 'atrasadas' %}data-remover-concluidas data-vazio="Nenhuma tarefa atrasada neste projeto. 🎉"{% endif %}>
       {% for tarefa in tarefas %}
         {% include "tarefas/_item.html" %}
       {% endfor %}

@@ -18,12 +18,14 @@ def create_app(nome_config=None):
     PASTA_INSTANCIA.mkdir(exist_ok=True)
     db.init_app(app)
 
+    from app import comandos
     from app.controllers import erros, filtros, projetos, tarefas
 
     app.register_blueprint(projetos.bp)
     app.register_blueprint(tarefas.bp)
     erros.registrar(app)
     filtros.registrar(app)
+    comandos.registrar(app)
 
     @app.get("/")
     def inicio():

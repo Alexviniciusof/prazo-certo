@@ -2,6 +2,8 @@
 
 | Arquivo | Conteúdo |
 |---|---|
+| [diagramas-uml.md](diagramas-uml.md) | Casos de uso (com descrições e rastreabilidade), classes, sequência, atividades, estados e componentes |
+| [diagramas/](diagramas/) | Os mesmos diagramas em PNG, para colar no documento de entrega |
 | [modelo-de-dados.md](modelo-de-dados.md) | Diagrama de classes, DER, modelo lógico normalizado, projeto físico e regras |
 | [dicionario-de-dados.md](dicionario-de-dados.md) | Dicionário de dados das tabelas `projeto` e `tarefa` |
 | [schema.sql](schema.sql) | Script de criação do banco (SQLite) |

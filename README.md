@@ -18,4 +18,27 @@ marca tarefas como concluídas e acompanha o progresso e os atrasos.
 | `situacao2/` | Código-fonte: app (models, controllers, templates, static), testes, requirements e manual |
 | `situacao3/` | Testes com colegas, laudo de qualidade e roteiro do vídeo |
 
-Instruções de instalação e uso ficam em [`situacao2/README.md`](situacao2/README.md).
+## Começo rápido
+```bash
+cd situacao2
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+flask --app run popular-exemplo   # opcional: dados de exemplo
+flask --app run run               # abre em http://127.0.0.1:5000
+pytest                            # roda os 66 testes
+```
+
+Instalação detalhada, configuração do banco e **manual de uso** em [`situacao2/README.md`](situacao2/README.md).
+
+## Funcionalidades
+- Cadastrar, listar, editar e excluir projetos (nome obrigatório, descrição opcional)
+- Cadastrar, listar, editar e excluir tarefas em cada projeto (título obrigatório, prazo opcional)
+- Marcar e desmarcar tarefa como concluída, sem recarregar a página
+- Progresso de cada projeto (concluídas ÷ total, em %)
+- Filtro de tarefas atrasadas por projeto e página com as atrasadas de todos os projetos
+- Excluir um projeto exclui as suas tarefas
+- Mensagens claras de sucesso e de erro, sem expor erro técnico
+- Layout para celular e modo escuro automático
+
+![Tela de tarefas do projeto](situacao1/prototipo/2-tarefas-do-projeto.png)

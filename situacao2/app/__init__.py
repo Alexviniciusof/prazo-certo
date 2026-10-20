@@ -19,10 +19,11 @@ def create_app(nome_config=None):
     db.init_app(app)
 
     from app import comandos
-    from app.controllers import erros, filtros, projetos, tarefas
+    from app.controllers import avaliacoes, erros, filtros, projetos, tarefas
 
     app.register_blueprint(projetos.bp)
     app.register_blueprint(tarefas.bp)
+    app.register_blueprint(avaliacoes.bp)
     erros.registrar(app)
     filtros.registrar(app)
     comandos.registrar(app)

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block titulo %}Avaliar o sistema{% endblock %}
+{% block conteudo %}
+  <h1>Avaliar o sistema</h1>
+  <p class="subtitulo">
+    Obrigado por testar o Prazo Certo! Use o sistema à vontade (crie projetos, tarefas, conclua, exclua…)
+    e depois conte aqui como foi. Erros e críticas são muito bem-vindos.
+  </p>
+
+  <form class="cartao formulario" method="post" action="{{ url_for('avaliacoes.enviar') }}" enctype="multipart/form-data">
+    <div class="formulario-linha formulario-linha-sem-fundo">
+      <div class="campo campo-grande">
+        <label for="nome">Seu nome <span class="obrigatorio">*</span></label>
+        <input id="nome" name="nome" type="text" maxlength="100" required autofocus
+               data-obrigatorio="Informe o seu nome." value="{{ dados.get('nome', '') }}">
+      </div>
+      <div class="campo">
+        <label for="data_teste">Data do teste <span class="obrigatorio">*</span></label>
+        <input id="data_teste" name="data_teste" type="date" required
+               data-obrigatorio="Informe a data do teste." value="{{ dados.get('data_teste', '') }}">
+      </div>
+    </div>
+
+    <label for="dispositivo">Aparelho e navegador <span class="opcional">(opcional)</span></label>
+    <input id="dispositivo" name="dispositivo" type="text" maxlength="100"
+           placeholder="Ex.: Celular Android / Chrome, Notebook / Edge" value="{{ dados.get('dispositivo', '') }}">
+
+    <label for="funcionou">O que você testou e funcionou <span class="obrigatorio">*</span></label>
+    <textarea id="funcionou" name="funcionou" rows="4" maxlength="2000" data-contador required
+              data-obrigatorio="Conte o que você testou e funcionou."
+              placeholder="Ex.: criei um projeto, adicionei 3 tarefas e marquei uma como concluída; a barra de progresso atualizou.">{{ dados.get('funcionou', '') }}</textarea>
+
+    <label for="nao_funcionou">O que testou e NÃO funcionou — e o que deve ser corrigido</label>
+    <textarea id="nao_funcionou" name="nao_funcionou" rows="4" maxlength="2000" data-contador
+              placeholder="Descreva o que você fez, o que esperava e o que aconteceu. Se tudo funcionou, escreva “Nada”.">{{ dados.get('nao_funcionou', '') }}</textarea>
+
+    <label for="nao_testado">Funcionalidade que você não testou — e por quê</label>
+    <textarea id="nao_testado" name="nao_testado" rows="3" maxlength="2000" data-contador
+              placeholder="Ex.: não testei excluir projeto porque não achei o botão. Ou: senti falta de uma busca.">{{ dados.get('nao_testado', '') }}</textarea>
+
+    <label for="sugestoes">Sugestões de melhoria <span class="opcional">(opcional)</span></label>
+    <textarea id="sugestoes" name="sugestoes" rows="3" maxlength="2000" data-contador>{{ dados.get('sugestoes', '') }}</textarea>
+
+    <label for="nota">Nota geral <span class="opcional">(opcional)</span></label>
+    <select id="nota" name="nota">
+      <option value="">Escolha…</option>
+      {% for valor, texto in [(5, '5 — Excelente'), (4, '4 — Bom'), (3, '3 — Regular'), (2, '2 — Ruim'), (1, '1 — Muito ruim')] %}
+        <option value="{{ valor }}" {{ 'selected' if dados.get('nota') == valor|string }}>{{ texto }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="prints">Prints das telas com erro <span class="opcional">(até 3 imagens de até 3 MB)</span></label>
+    <input id="prints" name="prints" type="file" accept="image/png,image/jpeg,image/gif,image/webp" multiple
+           data-max-arquivos="3" data-max-mb="3">
+    <div class="previas" id="previas" aria-live="polite"></div>
+    {% if erro %}<p class="opcional">Se você tinha escolhido prints, escolha de novo antes de enviar.</p>{% endif %}
+
+    <div class="acoes">
+      <button class="botao botao-principal" type="submit">Enviar avaliação</button>
+    </div>
+  </form>
+{% endblock %}

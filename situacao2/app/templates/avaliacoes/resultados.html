@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block titulo %}Avaliações recebidas{% endblock %}
+{% block conteudo %}
+  <h1>Avaliações recebidas</h1>
+  <p class="subtitulo">{{ avaliacoes|length }} avaliação(ões). Esta página só abre com a chave.</p>
+
+  {% for a in avaliacoes %}
+    <article class="cartao avaliacao">
+      <h2>{{ loop.index }}. {{ a.nome }}</h2>
+      <dl>
+        <dt>Data do teste</dt><dd>{{ a.data_teste | data_br }}</dd>
+        <dt>Aparelho e navegador</dt><dd>{{ a.dispositivo or '—' }}</dd>
+        <dt>Nota</dt><dd>{{ a.nota ~ ' de 5' if a.nota else '—' }}</dd>
+        <dt>O que testou e funcionou</dt><dd>{{ a.funcionou }}</dd>
+        <dt>O que testou e não funcionou</dt><dd>{{ a.nao_funcionou or '—' }}</dd>
+        <dt>Funcionalidade não testada</dt><dd>{{ a.nao_testado or '—' }}</dd>
+        <dt>Sugestões</dt><dd>{{ a.sugestoes or '—' }}</dd>
+      </dl>
+      {% if a.prints %}
+        <div class="previas">
+          {% for p in a.prints %}
+            {% set url = url_for('avaliacoes.ver_print', print_id=p.id, chave=chave) %}
+            <a href="{{ url }}" target="_blank" rel="noopener"><img src="{{ url }}" alt="Print enviado por {{ a.nome }}: {{ p.nome_arquivo }}"></a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </article>
+  {% else %}
+    <p class="cartao vazio">Nenhuma avaliação recebida ainda.</p>
+  {% endfor %}
+{% endblock %}

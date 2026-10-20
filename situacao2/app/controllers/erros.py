@@ -25,6 +25,10 @@ def registrar(app):
     def pagina_inexistente(_erro):
         return _responder("Página não encontrada.", 404)
 
+    @app.errorhandler(413)
+    def envio_grande_demais(_erro):
+        return _responder("Os arquivos enviados são grandes demais. Envie prints de até 3 MB cada.", 413)
+
     @app.errorhandler(405)
     def metodo_nao_permitido(_erro):
         return _responder("Essa ação não é permitida por aqui.", 405)

@@ -177,3 +177,37 @@
 window.addEventListener("pageshow", () => {
   document.querySelectorAll('button[type="submit"][disabled]').forEach((b) => { b.disabled = false; });
 });
+
+// Prévia e limite dos prints no formulário de avaliação.
+(() => {
+  const campo = document.querySelector("input[type=file][data-max-arquivos]");
+  if (!campo) return;
+  const previas = document.getElementById("previas");
+  const maxArquivos = Number(campo.dataset.maxArquivos);
+  const maxBytes = Number(campo.dataset.maxMb) * 1024 * 1024;
+
+  campo.addEventListener("change", () => {
+    previas.replaceChildren();
+    campo.setCustomValidity("");
+    const arquivos = [...campo.files];
+    let problema = "";
+    if (arquivos.length > maxArquivos) problema = `Escolha no máximo ${maxArquivos} imagens.`;
+    const grande = arquivos.find((a) => a.size > maxBytes);
+    if (grande) problema = `A imagem “${grande.name}” passa de ${campo.dataset.maxMb} MB.`;
+    if (problema) {
+      campo.value = "";
+      const aviso = document.createElement("p");
+      aviso.className = "erro-campo";
+      aviso.textContent = problema;
+      previas.appendChild(aviso);
+      return;
+    }
+    arquivos.forEach((arquivo) => {
+      const img = document.createElement("img");
+      img.alt = arquivo.name;
+      img.src = URL.createObjectURL(arquivo);
+      img.onload = () => URL.revokeObjectURL(img.src);
+      previas.appendChild(img);
+    });
+  });
+})();

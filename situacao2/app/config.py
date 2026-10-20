@@ -27,11 +27,16 @@ def _url_do_banco(padrao):
 
 class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    # Limite do envio do formulário de avaliação (3 prints de até 3 MB + textos).
+    MAX_CONTENT_LENGTH = 12 * 1024 * 1024
     TESTING = False
     DEBUG = False
 
     def __init__(self):
         self.SECRET_KEY = os.environ.get("SECRET_KEY")
+        # Chave para ver as avaliações dos colegas em /avaliacoes?chave=...
+        # Sem ela, a página de resultados fica desligada.
+        self.AVALIACOES_CHAVE = os.environ.get("AVALIACOES_CHAVE") or None
         self.SQLALCHEMY_DATABASE_URI = _url_do_banco(f"sqlite:///{PASTA_INSTANCIA / 'prazo_certo.db'}")
 
 

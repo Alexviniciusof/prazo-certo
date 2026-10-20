@@ -29,6 +29,10 @@
     {% block conteudo %}{% endblock %}
   </main>
 
+  <footer class="rodape">
+    Testando o sistema? <a href="{{ url_for('avaliacoes.formulario') }}">Conte como foi</a>
+  </footer>
+
   <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
 </body>
 </html>

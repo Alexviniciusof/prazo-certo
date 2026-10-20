@@ -499,3 +499,53 @@ h1 {
 
 .conteudo > h1 { margin-bottom: 16px; }
 .conteudo > h1 + .subtitulo { margin-top: -10px; }
+
+/* ---------- rodapé ---------- */
+.rodape {
+  padding: 20px 16px 32px;
+  text-align: center;
+  color: var(--texto-suave);
+  font-size: 0.95rem;
+}
+
+/* ---------- formulário de avaliação ---------- */
+.formulario select {
+  display: block;
+  width: 100%;
+  max-width: 260px;
+  margin-bottom: 18px;
+  padding: 10px 12px;
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+}
+
+.formulario input[type="file"] { padding: 8px; }
+
+.formulario-linha-sem-fundo { margin-bottom: 18px; }
+.formulario-linha-sem-fundo input { margin-bottom: 0; }
+
+.previas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: -8px 0 18px;
+}
+
+.previas img {
+  width: 120px;
+  height: 90px;
+  object-fit: cover;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+}
+
+.acoes-centro { justify-content: center; }
+
+.avaliacao h2 { margin: 0 0 12px; font-size: 1.15rem; }
+.avaliacao dl { margin: 0 0 12px; }
+.avaliacao dt { font-weight: 600; margin-top: 10px; }
+.avaliacao dd { margin: 2px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--texto-suave); }
+.avaliacao .previas { margin: 0; }

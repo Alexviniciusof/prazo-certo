@@ -29,7 +29,7 @@ pip install -r requirements.txt
 cp .env.example .env
 flask --app run popular-exemplo   # opcional: dados de exemplo
 flask --app run run               # abre em http://127.0.0.1:5000
-pytest                            # roda os 72 testes
+pytest                            # roda os 93 testes
 ```
 
 Instalação detalhada, configuração do banco e **manual de uso** em [`situacao2/README.md`](situacao2/README.md).
@@ -43,5 +43,6 @@ Instalação detalhada, configuração do banco e **manual de uso** em [`situaca
 - Excluir um projeto exclui as suas tarefas
 - Mensagens claras de sucesso e de erro, sem expor erro técnico
 - Layout para celular e modo escuro automático
+- Formulário de avaliação para os colegas testarem o sistema (Situação 3): `/avaliacao`
 
 ![Tela de tarefas do projeto](situacao1/prototipo/2-tarefas-do-projeto.png)

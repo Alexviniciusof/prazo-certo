@@ -62,16 +62,17 @@ E acesse `http://<IP-do-computador>:5000`.
 pytest
 ```
 
-São **72 testes automatizados** em `tests/`, e cada um usa um banco novo, em memória:
+São **93 testes automatizados** em `tests/`, e cada um usa um banco novo, em memória:
 
 | Arquivo | O que testa |
 |---|---|
 | `test_projetos.py` | Criar, listar, editar e excluir projetos; nome obrigatório e único; excluir projeto apaga as tarefas; cálculo do progresso |
 | `test_tarefas.py` | Criar tarefa; não aceitar tarefa sem título; prazo válido; concluir e desmarcar; ordem da lista; listar só as atrasadas |
+| `test_avaliacoes.py` | Formulário de avaliação dos colegas: campos obrigatórios, data, nota, prints (tipo real, tamanho e quantidade) e página de resultados protegida por chave |
 | `test_config.py` | Endereço do banco ajustado para o driver certo; produção não sobe sem `SECRET_KEY` |
 | `test_rotas.py` | Páginas e formulários: mensagens de sucesso e de erro, filtro de atrasadas, resposta JSON para o JavaScript, página 404 e erro de banco sem mostrar detalhe técnico |
 
-Resultado esperado: `72 passed`.
+Resultado esperado: `93 passed`.
 
 ## 4. Configuração (variáveis de ambiente)
 
@@ -82,6 +83,7 @@ Nenhuma senha ou chave fica no código. Tudo vem do arquivo `.env` (ou das vari�
 | `APP_ENV` | `development` ou `production` | `development` |
 | `SECRET_KEY` | Chave que protege as mensagens da sessão. **Obrigatória em produção** | gerada sozinha em desenvolvimento |
 | `DATABASE_URL` | Endereço do banco de dados | SQLite em `instance/prazo_certo.db` |
+| `AVALIACOES_CHAVE` | Chave para ver as avaliações dos colegas em `/avaliacoes?chave=...` | sem chave, a página fica desligada |
 
 Para gerar uma `SECRET_KEY`:
 
@@ -223,6 +225,8 @@ Fluxo de uma requisição: **navegador → controller → model (servicos) → b
 | GET / POST | `/tarefas/<id>/editar` | Edita a tarefa |
 | POST | `/tarefas/<id>/alternar` | Conclui ou desmarca (responde JSON se pedido com `Accept: application/json`) |
 | POST | `/tarefas/<id>/excluir` | Exclui a tarefa |
+| GET / POST | `/avaliacao` | Formulário de avaliação para os colegas (Situação 3) |
+| GET | `/avaliacoes?chave=...` | Avaliações recebidas (também em `/avaliacoes.json`) |
 
 A documentação do banco (diagramas, modelo lógico e dicionário de dados) está em [`../situacao1`](../situacao1).
 

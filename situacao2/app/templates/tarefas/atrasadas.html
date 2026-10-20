@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block titulo %}Tarefas atrasadas{% endblock %}
+{% block conteudo %}
+  <h1>Tarefas atrasadas</h1>
+  <p class="subtitulo">Tarefas pendentes cujo prazo já passou, de todos os projetos.</p>
+
+  {% if tarefas %}
+    {% set mostrar_projeto = true %}
+    {% set voltar_para = url_for('tarefas.atrasadas') %}
+    <ul class="lista-tarefas">
+      {% for tarefa in tarefas %}
+        {% include "tarefas/_item.html" %}
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="cartao vazio">Nenhuma tarefa atrasada. Tudo em dia! 🎉</p>
+  {% endif %}
+{% endblock %}

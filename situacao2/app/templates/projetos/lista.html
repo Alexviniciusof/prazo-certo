@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block titulo %}Projetos{% endblock %}
+{% block conteudo %}
+  <div class="cabecalho">
+    <h1>Projetos</h1>
+    <a class="botao botao-principal" href="{{ url_for('projetos.novo') }}">+ Novo projeto</a>
+  </div>
+
+  {% if projetos %}
+    <ul class="lista-projetos">
+      {% for projeto in projetos %}
+        {% set atrasadas = projeto.total_atrasadas(hoje) %}
+        <li class="cartao projeto">
+          <a class="projeto-nome" href="{{ url_for('projetos.detalhar', projeto_id=projeto.id) }}">{{ projeto.nome }}</a>
+          {% if projeto.descricao %}<p class="projeto-descricao">{{ projeto.descricao }}</p>{% endif %}
+          <div class="progresso" role="progressbar" aria-valuenow="{{ projeto.progresso }}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progresso-barra" style="width: {{ projeto.progresso }}%"></div>
+          </div>
+          <p class="projeto-resumo">
+            <strong>{{ projeto.progresso }}%</strong> ·
+            {{ projeto.tarefas_concluidas }} de {{ projeto.total_tarefas }} tarefa{{ 's' if projeto.total_tarefas != 1 }} concluída{{ 's' if projeto.total_tarefas != 1 }}
+            {% if atrasadas %}· <span class="selo selo-atraso">{{ atrasadas }} atrasada{{ 's' if atrasadas != 1 }}</span>{% endif %}
+          </p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <section class="cartao vazio">
+      <p>Você ainda não tem projetos.</p>
+      <a class="botao botao-principal" href="{{ url_for('projetos.novo') }}">Criar o primeiro projeto</a>
+    </section>
+  {% endif %}
+{% endblock %}

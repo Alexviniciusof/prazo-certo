@@ -1,0 +1,30 @@
+{% set atrasada = tarefa.esta_atrasada(hoje) %}
+<li class="tarefa {{ 'concluida' if tarefa.concluida }} {{ 'atrasada' if atrasada }}" data-tarefa="{{ tarefa.id }}">
+  <form method="post" action="{{ url_for('tarefas.alternar', tarefa_id=tarefa.id) }}" class="form-alternar">
+    {% if voltar_para %}<input type="hidden" name="voltar_para" value="{{ voltar_para }}">{% endif %}
+    <button class="caixa" type="submit"
+            aria-label="{{ 'Marcar como pendente' if tarefa.concluida else 'Marcar como concluída' }}"
+            aria-pressed="{{ 'true' if tarefa.concluida else 'false' }}">
+      <span aria-hidden="true">✓</span>
+    </button>
+  </form>
+
+  <div class="tarefa-texto">
+    <span class="tarefa-titulo">{{ tarefa.titulo }}</span>
+    <span class="tarefa-info">
+      {% if mostrar_projeto %}
+        <a href="{{ url_for('projetos.detalhar', projeto_id=tarefa.projeto_id) }}">{{ tarefa.projeto.nome }}</a> ·
+      {% endif %}
+      {% if tarefa.prazo %}Prazo: {{ tarefa.prazo | data_br }}{% else %}Sem prazo{% endif %}
+      {% if atrasada %}<span class="selo selo-atraso">Atrasada</span>{% endif %}
+    </span>
+  </div>
+
+  <div class="tarefa-acoes">
+    <a class="botao botao-pequeno" href="{{ url_for('tarefas.editar', tarefa_id=tarefa.id) }}">Editar</a>
+    <form method="post" action="{{ url_for('tarefas.excluir', tarefa_id=tarefa.id) }}"
+          data-confirmar="Excluir a tarefa “{{ tarefa.titulo }}”?">
+      <button class="botao botao-pequeno botao-perigo" type="submit">Excluir</button>
+    </form>
+  </div>
+</li>

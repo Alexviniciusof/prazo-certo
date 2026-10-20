@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block titulo %}Ops{% endblock %}
+{% block conteudo %}
+  <section class="cartao vazio">
+    <h1>{{ mensagem }}</h1>
+    {% if status == 500 %}
+      <p>Algo deu errado do nosso lado. Seus dados não foram perdidos.</p>
+    {% endif %}
+    <a class="botao" href="{{ url_for('projetos.listar') }}">Voltar para os projetos</a>
+  </section>
+{% endblock %}

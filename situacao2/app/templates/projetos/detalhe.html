@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block titulo %}{{ projeto.nome }}{% endblock %}
+{% block conteudo %}
+  <a class="voltar" href="{{ url_for('projetos.listar') }}">← Projetos</a>
+
+  <div class="cabecalho">
+    <div>
+      <h1>{{ projeto.nome }}</h1>
+      {% if projeto.descricao %}<p class="projeto-descricao">{{ projeto.descricao }}</p>{% endif %}
+    </div>
+    <div class="acoes">
+      <a class="botao" href="{{ url_for('projetos.editar', projeto_id=projeto.id) }}">Editar</a>
+      <form method="post" action="{{ url_for('projetos.excluir', projeto_id=projeto.id) }}"
+            data-confirmar="Excluir o projeto “{{ projeto.nome }}” e todas as suas tarefas? Essa ação não pode ser desfeita.">
+        <button class="botao botao-perigo" type="submit">Excluir</button>
+      </form>
+    </div>
+  </div>
+
+  <section class="cartao" id="resumo-projeto">
+    <div class="progresso" role="progressbar" aria-valuenow="{{ projeto.progresso }}" aria-valuemin="0" aria-valuemax="100">
+      <div class="progresso-barra" style="width: {{ projeto.progresso }}%"></div>
+    </div>
+    <p class="projeto-resumo">
+      <strong data-progresso>{{ projeto.progresso }}%</strong> concluído ·
+      <span data-contagem>{{ projeto.tarefas_concluidas }} de {{ projeto.total_tarefas }}</span> tarefas ·
+      <span data-atrasadas>{{ projeto.total_atrasadas(hoje) }}</span> atrasada(s)
+    </p>
+  </section>
+
+  <form class="cartao formulario formulario-linha" method="post"
+        action="{{ url_for('projetos.criar_tarefa', projeto_id=projeto.id) }}">
+    <div class="campo campo-grande">
+      <label for="titulo">Nova tarefa <span class="obrigatorio">*</span></label>
+      <input id="titulo" name="titulo" type="text" maxlength="150" required
+             placeholder="O que precisa ser feito?" value="{{ dados_tarefa.get('titulo', '') }}">
+    </div>
+    <div class="campo">
+      <label for="prazo">Prazo <span class="opcional">(opcional)</span></label>
+      <input id="prazo" name="prazo" type="date" value="{{ dados_tarefa.get('prazo', '') }}">
+    </div>
+    <button class="botao botao-principal" type="submit">Adicionar</button>
+  </form>
+
+  <nav class="filtros" aria-label="Filtrar tarefas">
+    <a class="filtro {{ 'ativo' if filtro != 'atrasadas' }}" href="{{ url_for('projetos.detalhar', projeto_id=projeto.id) }}">Todas</a>
+    <a class="filtro {{ 'ativo' if filtro == 'atrasadas' }}" href="{{ url_for('projetos.detalhar', projeto_id=projeto.id, filtro='atrasadas') }}">Atrasadas</a>
+  </nav>
+
+  {% if tarefas %}
+    <ul class="lista-tarefas">
+      {% for tarefa in tarefas %}
+        {% include "tarefas/_item.html" %}
+      {% endfor %}
+    </ul>
+  {% elif filtro == 'atrasadas' %}
+    <p class="cartao vazio">Nenhuma tarefa atrasada neste projeto. 🎉</p>
+  {% else %}
+    <p class="cartao vazio">Este projeto ainda não tem tarefas. Use o formulário acima para adicionar a primeira.</p>
+  {% endif %}
+{% endblock %}

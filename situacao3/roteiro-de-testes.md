@@ -1,6 +1,6 @@
 # Roteiro de testes do sistema
 
-Casos de teste manuais, feitos no sistema publicado (https://prazo-certo-rouge.vercel.app) e no navegador.
+Casos de teste manuais, feitos no sistema publicado (https://prazo-certo-pit.vercel.app) e no navegador.
 Servem também de guia para os colegas. Cada caso aponta o requisito (RF) e o caso de uso (UC) que testa.
 
 **Legenda do resultado:** ✅ passou · ❌ falhou · ⏳ ainda não executado

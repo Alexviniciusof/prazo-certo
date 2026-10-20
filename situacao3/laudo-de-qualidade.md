@@ -4,7 +4,7 @@
 |---|---|
 | **Sistema** | Prazo Certo — gerenciador de tarefas por projeto |
 | **Versão avaliada** | commit `________` (preencher com a versão testada pelos colegas) |
-| **Endereço** | https://prazo-certo-rouge.vercel.app |
+| **Endereço** | https://prazo-certo-pit.vercel.app |
 | **Período dos testes** | __/__/2026 a __/__/2026 |
 | **Responsável** | Alex Lima |
 

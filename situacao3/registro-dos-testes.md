@@ -1,7 +1,7 @@
 # Registro dos testes feitos pelos colegas
 
-Sistema testado: **Prazo Certo** — https://prazo-certo-rouge.vercel.app
-Formulário usado: https://prazo-certo-rouge.vercel.app/avaliacao
+Sistema testado: **Prazo Certo** — https://prazo-certo-pit.vercel.app
+Formulário usado: https://prazo-certo-pit.vercel.app/avaliacao
 
 > Preenchido a partir das respostas do formulário (`/avaliacoes?chave=...`). Os prints enviados
 > ficam em `evidencias/` com o número do colega no nome (ex.: `colega1-print1.png`).

@@ -13,11 +13,11 @@
 A disciplina pede um formulário para os colegas descreverem bugs, sugestões e enviarem prints.
 Ele foi feito **dentro do próprio sistema**, então o colega testa e avalia no mesmo lugar:
 
-- **Formulário:** https://prazo-certo-rouge.vercel.app/avaliacao (também no rodapé de todas as páginas)
+- **Formulário:** https://prazo-certo-pit.vercel.app/avaliacao (também no rodapé de todas as páginas)
 - **Campos:** nome, data do teste, aparelho e navegador, o que testou e funcionou, o que não funcionou
   (e o que corrigir), funcionalidade não testada (e por quê), sugestões, nota de 1 a 5 e até 3 prints.
   Os 5 primeiros são os itens mínimos exigidos pela disciplina.
-- **Resultados:** `https://prazo-certo-rouge.vercel.app/avaliacoes?chave=<CHAVE>` (também em JSON em `/avaliacoes.json?chave=<CHAVE>`).
+- **Resultados:** `https://prazo-certo-pit.vercel.app/avaliacoes?chave=<CHAVE>` (também em JSON em `/avaliacoes.json?chave=<CHAVE>`).
   Sem a chave certa a página responde "Página não encontrada", então as avaliações não ficam públicas.
 
 | Computador | Celular |

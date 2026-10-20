@@ -114,7 +114,7 @@ APP_ENV=production SECRET_KEY=<sua-chave> DATABASE_URL=<seu-banco> gunicorn run:
 
 ### Publicar na Vercel (como está hoje)
 
-O sistema está hospedado na **Vercel**, com banco **Neon** (PostgreSQL), em https://prazo-certo-rouge.vercel.app.
+O sistema está hospedado na **Vercel**, com banco **Neon** (PostgreSQL), em https://prazo-certo-pit.vercel.app.
 
 - O projeto da Vercel está ligado a este repositório do GitHub, com **Root Directory = `situacao2`**
   e o preset **Flask**. A Vercel usa o arquivo [`index.py`](index.py) como ponto de entrada.

@@ -24,6 +24,7 @@ Ele foi feito **dentro do próprio sistema**, então o colega testa e avalia no 
 |---|---|
 | ![Formulário](imagens/formulario-de-avaliacao.png) | ![Formulário no celular](imagens/formulario-no-celular.png) |
 
+
 ## Passo a passo da Situação 3
 
 2. Acompanhar as respostas em `/avaliacoes?chave=...`.

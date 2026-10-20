@@ -1,0 +1,8 @@
+Flask==3.1.3
+Flask-SQLAlchemy==3.1.1
+SQLAlchemy==2.1.5
+python-dotenv==1.2.4
+pytest==9.1.1
+# Para usar PostgreSQL ou MySQL em vez de SQLite, instale também o driver:
+# psycopg[binary]   (PostgreSQL)
+# PyMySQL           (MySQL)

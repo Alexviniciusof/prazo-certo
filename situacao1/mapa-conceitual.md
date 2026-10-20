@@ -9,6 +9,11 @@ As imagens em PNG ficam em [`diagramas/`](diagramas/).
 
 Mostra as ideias principais do Prazo Certo e como elas se relacionam.
 
+![Mapa conceitual](diagramas/11-mapa-conceitual.png)
+
+<details>
+<summary>Código do diagrama (Mermaid)</summary>
+
 ```mermaid
 flowchart TD
     sistema(["<b>Prazo Certo</b><br/>sistema web de tarefas"])
@@ -59,6 +64,8 @@ flowchart TD
     class erro_tecnico negado
 ```
 
+</details>
+
 **Como ler alguns caminhos do mapa:**
 - Usuário → *cadastra* → Projeto → *possui 0 ou mais* → Tarefas.
 - Tarefa → *tem um* → Status → *pode ser* → Pendente → *vira* → Atrasada, quando o prazo é anterior à data de hoje.
@@ -68,6 +75,11 @@ flowchart TD
 ## 2. Mapa de navegação (IHC)
 
 Mostra as telas do sistema e como o usuário passa de uma para outra.
+
+![Mapa de navegação](diagramas/12-mapa-de-navegacao.png)
+
+<details>
+<summary>Código do diagrama (Mermaid)</summary>
 
 ```mermaid
 flowchart LR
@@ -95,6 +107,8 @@ flowchart LR
     obrigado -->|voltar ao sistema| lista
     erro -->|voltar para os projetos| lista
 ```
+
+</details>
 
 Na página do projeto, **adicionar, concluir e excluir tarefas** acontece na própria tela, sem trocar de página.
 

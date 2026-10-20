@@ -9,7 +9,7 @@
 | [dicionario-de-dados.md](dicionario-de-dados.md) | Dicionário de dados das tabelas `projeto` e `tarefa` |
 | [schema.sql](schema.sql) | Script de criação do banco (SQLite) |
 
-Os diagramas usam Mermaid e aparecem desenhados direto no GitHub.
+Os diagramas aparecem como imagem (PNG, em `diagramas/`); o código Mermaid de cada um fica logo abaixo da imagem.
 
 ## Protótipo das telas
 Capturas do sistema funcionando, em [`prototipo/`](prototipo/):

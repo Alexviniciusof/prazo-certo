@@ -1,7 +1,7 @@
 # Diagramas UML — Prazo Certo
 
-Diagramas do sistema como ele foi implementado. Os desenhos estão em Mermaid (o GitHub mostra
-direto nesta página), e as imagens PNG ficam em [`diagramas/`](diagramas/) para colar no documento de entrega.
+Diagramas do sistema como ele foi implementado. Cada diagrama aparece como imagem (os arquivos PNG ficam em [`diagramas/`](diagramas/), prontos para colar no
+documento de entrega). O código Mermaid de cada um fica logo abaixo, em "Código do diagrama".
 
 | # | Diagrama | O que mostra |
 |---|---|---|
@@ -19,6 +19,11 @@ O diagrama de classes de persistência e o DER estão em [modelo-de-dados.md](mo
 ## 1. Diagrama de casos de uso
 
 **Ator:** Usuário, a pessoa que organiza os próprios projetos e tarefas. O sistema tem um único tipo de usuário.
+
+![Diagrama de casos de uso](diagramas/01-casos-de-uso.png)
+
+<details>
+<summary>Código do diagrama (Mermaid)</summary>
 
 ```mermaid
 flowchart LR
@@ -58,6 +63,8 @@ flowchart LR
     uc04 -.->|«include»| inc2
     uc10 -.->|«extend»| uc06
 ```
+
+</details>
 
 > Observação: o Mermaid não tem um tipo próprio para casos de uso. As elipses são os casos de uso, as linhas
 > contínuas ligam o ator, e as setas tracejadas são as relações «include» e «extend».
@@ -128,83 +135,84 @@ flowchart LR
 
 ## 2. Diagrama de classes
 
-Classes do código, separadas pelas camadas do MVC.
+Classes do código. Model: `Projeto`, `Tarefa`, `servicos` e os erros. Controller: `ProjetosController`, `TarefasController` e `TratamentoDeErros`.
+
+![Diagrama de classes](diagramas/02-classes.png)
+
+<details>
+<summary>Código do diagrama (Mermaid)</summary>
 
 ```mermaid
 classDiagram
     direction TB
 
-    namespace Model {
-        class Projeto {
-            +int id
-            +str nome
-            +str descricao
-            +datetime criado_em
-            +datetime atualizado_em
-            +list~Tarefa~ tarefas
-            +total_tarefas() int
-            +tarefas_concluidas() int
-            +progresso() int
-            +total_atrasadas(hoje) int
-        }
-        class Tarefa {
-            +int id
-            +int projeto_id
-            +str titulo
-            +date prazo
-            +str status
-            +datetime concluida_em
-            +concluida() bool
-            +concluir()
-            +reabrir()
-            +esta_atrasada(hoje) bool
-        }
-        class servicos {
-            <<módulo>>
-            +criar_projeto(nome, descricao) Projeto
-            +editar_projeto(id, nome, descricao) Projeto
-            +excluir_projeto(id)
-            +listar_projetos() list
-            +obter_projeto(id) Projeto
-            +criar_tarefa(projeto_id, titulo, prazo) Tarefa
-            +editar_tarefa(id, titulo, prazo) Tarefa
-            +excluir_tarefa(id)
-            +alternar_tarefa(id) Tarefa
-            +listar_tarefas(projeto_id, apenas_atrasadas, hoje) list
-            +listar_tarefas_atrasadas(hoje) list
-        }
-        class ErroNegocio {
-            +str mensagem
-        }
-        class ErroValidacao
-        class ErroNaoEncontrado
+    class Projeto {
+        +int id
+        +str nome
+        +str descricao
+        +datetime criado_em
+        +datetime atualizado_em
+        +list~Tarefa~ tarefas
+        +total_tarefas() int
+        +tarefas_concluidas() int
+        +progresso() int
+        +total_atrasadas(hoje) int
     }
+    class Tarefa {
+        +int id
+        +int projeto_id
+        +str titulo
+        +date prazo
+        +str status
+        +datetime concluida_em
+        +concluida() bool
+        +concluir()
+        +reabrir()
+        +esta_atrasada(hoje) bool
+    }
+    class servicos {
+        <<módulo>>
+        +criar_projeto(nome, descricao) Projeto
+        +editar_projeto(id, nome, descricao) Projeto
+        +excluir_projeto(id)
+        +listar_projetos() list
+        +obter_projeto(id) Projeto
+        +criar_tarefa(projeto_id, titulo, prazo) Tarefa
+        +editar_tarefa(id, titulo, prazo) Tarefa
+        +excluir_tarefa(id)
+        +alternar_tarefa(id) Tarefa
+        +listar_tarefas(projeto_id, apenas_atrasadas, hoje) list
+        +listar_tarefas_atrasadas(hoje) list
+    }
+    class ErroNegocio {
+        +str mensagem
+    }
+    class ErroValidacao
+    class ErroNaoEncontrado
 
-    namespace Controller {
-        class ProjetosController {
-            <<blueprint /projetos>>
-            +listar()
-            +novo()
-            +criar()
-            +detalhar(id)
-            +editar(id)
-            +atualizar(id)
-            +excluir(id)
-            +criar_tarefa(id)
-        }
-        class TarefasController {
-            <<blueprint /tarefas>>
-            +atrasadas()
-            +editar(id)
-            +atualizar(id)
-            +alternar(id)
-            +excluir(id)
-        }
-        class TratamentoDeErros {
-            +nao_encontrado() 404
-            +erro_de_banco() 500
-            +erro_inesperado() 500
-        }
+    class ProjetosController {
+        <<blueprint /projetos>>
+        +listar()
+        +novo()
+        +criar()
+        +detalhar(id)
+        +editar(id)
+        +atualizar(id)
+        +excluir(id)
+        +criar_tarefa(id)
+    }
+    class TarefasController {
+        <<blueprint /tarefas>>
+        +atrasadas()
+        +editar(id)
+        +atualizar(id)
+        +alternar(id)
+        +excluir(id)
+    }
+    class TratamentoDeErros {
+        +nao_encontrado() 404
+        +erro_de_banco() 500
+        +erro_inesperado() 500
     }
 
     Projeto "1" *-- "0..*" Tarefa : possui
@@ -218,11 +226,18 @@ classDiagram
     TratamentoDeErros ..> ErroNaoEncontrado : trata
 ```
 
+</details>
+
 ---
 
 ## 3. Diagramas de sequência
 
 ### 3.1 Cadastrar tarefa (UC05)
+
+![Sequência: cadastrar tarefa](diagramas/03-sequencia-cadastrar-tarefa.png)
+
+<details>
+<summary>Código do diagrama (Mermaid)</summary>
 
 ```mermaid
 sequenceDiagram
@@ -259,7 +274,14 @@ sequenceDiagram
     end
 ```
 
+</details>
+
 ### 3.2 Concluir tarefa sem recarregar a página (UC09)
+
+![Sequência: concluir tarefa](diagramas/04-sequencia-concluir-tarefa.png)
+
+<details>
+<summary>Código do diagrama (Mermaid)</summary>
 
 ```mermaid
 sequenceDiagram
@@ -290,7 +312,14 @@ sequenceDiagram
     end
 ```
 
+</details>
+
 ### 3.3 Excluir projeto com suas tarefas (UC04)
+
+![Sequência: excluir projeto](diagramas/05-sequencia-excluir-projeto.png)
+
+<details>
+<summary>Código do diagrama (Mermaid)</summary>
 
 ```mermaid
 sequenceDiagram
@@ -324,11 +353,18 @@ sequenceDiagram
     end
 ```
 
+</details>
+
 ---
 
 ## 4. Diagramas de atividades
 
 ### 4.1 Cadastrar tarefa
+
+![Atividades: cadastrar tarefa](diagramas/06-atividades-cadastrar-tarefa.png)
+
+<details>
+<summary>Código do diagrama (Mermaid)</summary>
 
 ```mermaid
 flowchart TD
@@ -353,7 +389,14 @@ flowchart TD
     a6 --> fim2((◉))
 ```
 
+</details>
+
 ### 4.2 Concluir ou desmarcar tarefa
+
+![Atividades: concluir tarefa](diagramas/07-atividades-concluir-tarefa.png)
+
+<details>
+<summary>Código do diagrama (Mermaid)</summary>
 
 ```mermaid
 flowchart TD
@@ -376,7 +419,14 @@ flowchart TD
     a9 --> fim((◉))
 ```
 
+</details>
+
 ### 4.3 Excluir projeto
+
+![Atividades: excluir projeto](diagramas/08-atividades-excluir-projeto.png)
+
+<details>
+<summary>Código do diagrama (Mermaid)</summary>
 
 ```mermaid
 flowchart TD
@@ -397,12 +447,19 @@ flowchart TD
     a6 --> fim2((◉))
 ```
 
+</details>
+
 ---
 
 ## 5. Diagrama de estados da tarefa
 
 O status gravado é só **pendente** ou **concluída**. "No prazo" e "atrasada" são calculados na hora,
 comparando o prazo com a data de hoje.
+
+![Estados da tarefa](diagramas/09-estados-da-tarefa.png)
+
+<details>
+<summary>Código do diagrama (Mermaid)</summary>
 
 ```mermaid
 stateDiagram-v2
@@ -427,9 +484,16 @@ stateDiagram-v2
     Concluida --> [*] : excluir tarefa ou projeto
 ```
 
+</details>
+
 ---
 
 ## 6. Diagrama de componentes (arquitetura MVC)
+
+![Componentes (MVC)](diagramas/10-componentes-mvc.png)
+
+<details>
+<summary>Código do diagrama (Mermaid)</summary>
 
 ```mermaid
 flowchart LR
@@ -467,3 +531,5 @@ flowchart LR
     re -. "trata erros de" .-> rp & rt
     cfg -. "DATABASE_URL" .-> md
 ```
+
+</details>

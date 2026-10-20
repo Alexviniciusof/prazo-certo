@@ -6,6 +6,11 @@ Um projeto tem zero ou muitas tarefas; cada tarefa pertence a exatamente um proj
 
 ## 1. Diagrama de classes de persistência (UML)
 
+![Diagrama de classes de persistência](diagramas/00-classes-de-persistencia.png)
+
+<details>
+<summary>Código do diagrama (Mermaid)</summary>
+
 ```mermaid
 classDiagram
     direction LR
@@ -35,10 +40,17 @@ classDiagram
     Projeto "1" *-- "0..*" Tarefa : possui
 ```
 
+</details>
+
 A ligação é uma **composição** (losango cheio): a tarefa não existe sem o projeto.
 Por isso, excluir um projeto exclui também as suas tarefas (requisito funcional 6).
 
 ## 2. Projeto conceitual (DER)
+
+![DER](diagramas/00-der.png)
+
+<details>
+<summary>Código do diagrama (Mermaid)</summary>
 
 ```mermaid
 erDiagram
@@ -61,6 +73,8 @@ erDiagram
         datetime atualizado_em
     }
 ```
+
+</details>
 
 - **PROJETO** — um conjunto de trabalho que o usuário quer organizar (ex.: "TCC", "Mudança de casa").
 - **TAREFA** — uma atividade que precisa ser feita dentro de um projeto (ex.: "Escrever introdução").

@@ -4,9 +4,9 @@
 |---|---|
 | [verificacao-e-validacao.md](verificacao-e-validacao.md) | Como o sistema foi verificado e validado (Modelo V), com os resultados |
 | [roteiro-de-testes.md](roteiro-de-testes.md) | Casos de teste passo a passo, com o resultado esperado e o obtido |
-| [registro-dos-testes.md](registro-dos-testes.md) | As 5 avaliações dos colegas (vira o PDF de entrega) |
+| [registro-dos-testes.pdf](registro-dos-testes.pdf) | **As 5 avaliações dos colegas (PDF de entrega)** — também em [Markdown](registro-dos-testes.md) |
 | [laudo-de-qualidade.md](laudo-de-qualidade.md) | Erros encontrados, correções e evidências |
-| [imagens/](imagens/) | Prints do formulário de avaliação |
+| [imagens/](imagens/) | Prints do formulário de avaliação e das correções (antes e depois) |
 
 ## Formulário de avaliação
 
@@ -17,16 +17,16 @@ Ele foi feito **dentro do próprio sistema**, então o colega testa e avalia no 
 - **Campos:** nome, data do teste, aparelho e navegador, o que testou e funcionou, o que não funcionou
   (e o que corrigir), funcionalidade não testada (e por quê), sugestões, nota de 1 a 5 e até 3 prints.
   Os 5 primeiros são os itens mínimos exigidos pela disciplina.
-- **Resultados:** `https://prazo-certo-pit.vercel.app/avaliacoes?chave=<CHAVE>` (também em JSON em `/avaliacoes.json?chave=<CHAVE>`).
-  Sem a chave certa a página responde "Página não encontrada", então as avaliações não ficam públicas.
+- **Resultados:** página protegida por chave (variável de ambiente `AVALIACOES_CHAVE`). Sem a chave certa
+  a página responde "Página não encontrada", então as avaliações não ficam públicas.
 
 | Computador | Celular |
 |---|---|
 | ![Formulário](imagens/formulario-de-avaliacao.png) | ![Formulário no celular](imagens/formulario-no-celular.png) |
 
+## Resultado
 
-## Passo a passo da Situação 3
-
-2. Acompanhar as respostas em `/avaliacoes?chave=...`.
-3. Passar as 5 avaliações para o [registro-dos-testes.md](registro-dos-testes.md) e gerar o PDF.
-4. Classificar cada problema no [laudo de qualidade](laudo-de-qualidade.md), corrigir o que for pertinente
+- 5 colegas testaram em 20/10/2026, nota média **4,2 de 5** ([registro](registro-dos-testes.pdf)).
+- 3 problemas relatados, **todos corrigidos**: aviso de prazo que já passou, botões maiores no celular
+  e busca/ordem das tarefas ([laudo](laudo-de-qualidade.md)).
+- 108 testes automatizados passando e 21 casos de teste de sistema aprovados.

@@ -18,7 +18,7 @@ marca tarefas como concluídas e acompanha o progresso e os atrasos.
 |---|---|
 | `situacao1/` | Documentação: escopo, diagramas, modelo de dados, dicionário de dados, protótipo |
 | `situacao2/` | Código-fonte: app (models, controllers, templates, static), testes, requirements e manual |
-| `situacao3/` | Testes com colegas, laudo de qualidade e roteiro do vídeo |
+| `situacao3/` | Testes com colegas (PDF), laudo de qualidade e correções |
 
 ## Começo rápido
 ```bash

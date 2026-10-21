@@ -3,9 +3,9 @@
 | | |
 |---|---|
 | **Sistema** | Prazo Certo — gerenciador de tarefas por projeto |
-| **Versão avaliada** | commit `________` (preencher com a versão testada pelos colegas) |
+| **Versão avaliada** | commit `438a867` (testada pelos colegas) · versão corrigida: commit `2f2da63` |
 | **Endereço** | https://prazo-certo-pit.vercel.app |
-| **Período dos testes** | __/__/2026 a __/__/2026 |
+| **Período dos testes** | 20/10/2026 |
 | **Responsável** | Alex Lima |
 
 ## 1. Objetivo
@@ -13,7 +13,7 @@ Registrar os erros encontrados no sistema, a gravidade de cada um, a correção 
 de antes e depois, conforme pedido na Situação 3.
 
 ## 2. Como os testes foram feitos
-1. **Testes automatizados** (pytest): 93 testes de unidade e de integração, em SQLite e PostgreSQL. Ver [verificação e validação](verificacao-e-validacao.md).
+1. **Testes automatizados** (pytest): 108 testes de unidade e de integração, em SQLite e PostgreSQL. Ver [verificação e validação](verificacao-e-validacao.md).
 2. **Teste de sistema:** [roteiro com 18 casos de teste](roteiro-de-testes.md) no sistema publicado.
 3. **Teste de aceitação:** 5 colegas usaram o sistema e responderam ao [formulário de avaliação](README.md#formulário-de-avaliação). Ver [registro dos testes](registro-dos-testes.md).
 
@@ -39,30 +39,43 @@ de antes e depois, conforme pedido na Situação 3.
 ### 4.2 Encontrados pelos colegas
 | ID | Descrição | Quem encontrou | Gravidade | Correção | Evidência (antes / depois) | Status |
 |---|---|---|---|---|---|---|
-| C01 | | | | | | |
-| C02 | | | | | | |
-| C03 | | | | | | |
+| C01 | Ao cadastrar uma tarefa com prazo anterior a hoje, o sistema não avisava; a tarefa aparecia como atrasada sem explicação | Lucas Oliveira | Média | Aviso embaixo do campo de prazo **antes de salvar** (JavaScript) e mensagem de atenção **depois de salvar** (servidor), ao criar e ao editar. A tarefa continua sendo aceita, porque registrar algo já atrasado é válido. 4 testes novos em `test_rotas.py` | [antes de salvar](imagens/correcoes/c01-aviso-antes-de-salvar.png) / [depois de salvar](imagens/correcoes/c01-aviso-depois-de-salvar.png) · commit `2f2da63` | ✅ Corrigido |
+| C02 | No celular, os botões Editar e Excluir da tarefa eram pequenos e ficavam colados, facilitando apertar o errado | Camila Ferreira | Baixa | No celular, os botões passaram de 34 px para 44 px de altura (tamanho mínimo recomendado para toque), com Editar à esquerda e Excluir à direita; o quadradinho de concluir também aumentou | [antes](imagens/correcoes/c02-antes-celular.png) / [depois](imagens/correcoes/c02-depois-celular.png) · commit `2f2da63` | ✅ Corrigido |
+| C03 | Em projetos com muitas tarefas era difícil achar uma tarefa, porque não havia busca | Pedro Henrique Sousa | Baixa | Campo "Buscar tarefa…" (busca por parte do nome, sem diferenciar maiúsculas) e escolha da ordem: pendentes primeiro, prazo ou nome. Funciona junto com o filtro de atrasadas. 11 testes novos | [antes](imagens/correcoes/c03-antes.png) / [depois](imagens/correcoes/c03-depois-busca.png) · commit `2f2da63` | ✅ Corrigido |
 
 ### 4.3 Sugestões de melhoria recebidas
 | ID | Sugestão | Quem sugeriu | Decisão (fazer agora / depois / não fazer) e motivo |
 |---|---|---|---|
-| S01 | | | |
-| S02 | | | |
+| S01 | Avisar quando a tarefa for cadastrada com data anterior à atual | Lucas Oliveira | **Feito agora** (é a correção C01) |
+| S02 | Aumentar os botões e o espaço entre as opções no celular | Camila Ferreira | **Feito agora** (é a correção C02) |
+| S03 | Barra de pesquisa e opções para ordenar as tarefas por nome, prazo ou situação | Pedro Henrique Sousa | **Feito agora** (é a correção C03); as três ordens pedidas foram implementadas |
 
 ## 5. Funcionalidades não testadas pelos colegas
-| Funcionalidade | Quantos não testaram | Motivo informado | Ação |
+| Funcionalidade | Quem não testou | Motivo informado | Ação |
 |---|---|---|---|
-| | | | |
+| Uso no celular | Lucas Oliveira | Usou só o notebook | Coberto pela Camila, que testou no celular, e pelos casos CT16 e CT20 |
+| Uso no computador | Camila Ferreira | Focou na experiência no celular | Coberto pelos outros 4 colegas, que usaram notebook |
+| Exclusão de projetos | Mariana Costa | Focou no cadastro e na edição | Coberto pelo caso CT14 e por testes automatizados (exclusão em cascata) |
+| Edição de projetos | Pedro Henrique Sousa | Focou na consulta das tarefas | Coberto pela Mariana, que testou a edição, pelo caso CT04 e por testes automatizados |
+
+Nenhuma funcionalidade ficou sem teste: o que um colega não testou foi testado por outro colega ou pelo roteiro de testes.
 
 ## 6. Indicadores
 | Indicador | Valor |
 |---|---|
-| Testes automatizados | 93 passando, 0 falhando |
-| Casos do roteiro de sistema | 18 de 18 passando |
-| Colegas que testaram | _ de 5 |
-| Nota média dos colegas | _ de 5 |
-| Erros encontrados pelos colegas | _ (Alta: _ · Média: _ · Baixa: _) |
-| Erros corrigidos | _ de _ |
+| Testes automatizados | 108 passando, 0 falhando (93 antes + 15 novos das correções), em SQLite e PostgreSQL |
+| Casos do roteiro de sistema | 21 de 21 passando (CT19 a CT21 criados para as correções) |
+| Colegas que testaram | 5 de 5 |
+| Nota média dos colegas | 4,2 de 5 |
+| Erros encontrados pelos colegas | 3 (Alta: 0 · Média: 1 · Baixa: 2) |
+| Erros corrigidos | 3 de 3 (colegas) · 5 de 5 (verificação interna) |
 
 ## 7. Conclusão
-_(Preencher depois das correções: o sistema atende ou não aos requisitos, o que foi corrigido e o que ficou para depois.)_
+O Prazo Certo **atende aos requisitos** da disciplina. Os 5 colegas conseguiram usar as funções principais (projetos, tarefas, concluir, progresso e atrasadas), e nenhum erro de gravidade alta foi encontrado por eles.
+
+Os 3 problemas relatados eram de usabilidade e foram **todos corrigidos** na versão `2f2da63`, já publicada:
+- **C01:** aviso de prazo que já passou, antes e depois de salvar;
+- **C02:** botões maiores e afastados no celular;
+- **C03:** busca de tarefas e escolha da ordem.
+
+Cada correção foi feita com testes automatizados escritos antes do código (TDD) e conferida no site publicado. Nenhuma sugestão dos colegas ficou pendente.

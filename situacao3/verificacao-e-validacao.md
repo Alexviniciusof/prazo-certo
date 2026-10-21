@@ -12,7 +12,7 @@ Seguindo o **Modelo V** do material da disciplina: cada nível de desenvolviment
 ## Verificação: "estamos construindo o sistema do jeito certo?"
 
 - **TDD:** os testes foram escritos antes do código (commit `5a229d8`), depois o código foi feito até todos passarem (commit `8d4a147`).
-- **Testes automatizados:** **93 testes**, rodando em menos de 1 segundo.
+- **Testes automatizados:** **108 testes**, rodando em menos de 1 segundo.
   ```
   $ pytest
   ============================== 93 passed ==============================

@@ -62,7 +62,7 @@ E acesse `http://<IP-do-computador>:5000`.
 pytest
 ```
 
-São **93 testes automatizados** em `tests/`, e cada um usa um banco novo, em memória:
+São **108 testes automatizados** em `tests/`, e cada um usa um banco novo, em memória:
 
 | Arquivo | O que testa |
 |---|---|

@@ -296,6 +296,8 @@ h1 {
 .mensagem-sucesso::before { content: "✓"; }
 .mensagem-erro { background: var(--perigo-claro); color: var(--perigo); border-color: currentColor; }
 .mensagem-erro::before { content: "!"; }
+.mensagem-aviso { background: var(--atraso-claro); color: var(--atraso); border-color: currentColor; }
+.mensagem-aviso::before { content: "!"; }
 .mensagem.saindo { opacity: 0; transform: translateY(-4px); }
 
 .mensagem-fechar {
@@ -475,7 +477,52 @@ h1 {
 .tarefa-info .selo { margin-left: 4px; }
 .tarefa:not(.atrasada) .selo-atraso { display: none; }
 
-.tarefa-acoes { display: flex; gap: 6px; flex: 0 0 auto; }
+.tarefa-acoes { display: flex; gap: 10px; flex: 0 0 auto; }
+
+/* ---------- busca e ordem ---------- */
+.barra-tarefas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin: 8px 0 12px;
+}
+
+.barra-tarefas .filtros { margin: 0; }
+
+.busca { display: flex; flex: 1 1 420px; justify-content: flex-end; gap: 8px; align-items: center; }
+
+.busca input, .busca select {
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+}
+
+.busca input { flex: 1 1 140px; min-width: 0; max-width: 300px; }
+.busca input:focus, .busca select:focus { outline: none; border-color: var(--destaque); box-shadow: var(--foco); }
+.busca .botao { flex: 0 0 auto; }
+
+/* Aviso que aparece embaixo do campo de prazo quando a data escolhida já passou. */
+.dica-prazo { margin: 6px 0 0; color: var(--atraso); font-size: 0.9rem; font-weight: 600; }
+
+/* No formulário em linha o aviso fica embaixo do campo sem desalinhar os outros. */
+.formulario-linha .campo { position: relative; }
+.formulario-linha .dica-prazo { position: absolute; left: 0; top: 100%; width: max-content; max-width: 70vw; }
+.formulario-linha:has(.dica-prazo:not([hidden])) { padding-bottom: 44px; }
+
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
 
 /* ---------- celular ---------- */
 @media (max-width: 560px) {
@@ -487,7 +534,18 @@ h1 {
   .cabecalho .acoes .botao { width: 100%; }
   .formulario-linha .botao { width: 100%; }
   .tarefa { flex-wrap: wrap; }
-  .tarefa-acoes { width: 100%; justify-content: flex-end; padding-left: 40px; }
+  /* Botões maiores e mais afastados no celular, para não apertar Excluir sem querer (C02). */
+  .tarefa-acoes { width: 100%; justify-content: space-between; gap: 16px; padding-left: 40px; }
+  .tarefa-acoes .botao-pequeno { min-height: 44px; padding: 8px 20px; font-size: 1rem; }
+  .tarefa-acoes form { margin-left: auto; }
+  .caixa { width: 36px; height: 36px; }
+  .barra-tarefas, .busca { width: 100%; }
+  .busca { flex-wrap: wrap; flex-basis: 100%; }
+  .busca input { flex: 1 1 100%; max-width: none; }
+  .busca select { flex: 1 1 100%; }
+  .busca .botao { flex: 1 1 0; }
+  .formulario-linha .dica-prazo { position: static; width: auto; max-width: none; }
+  .formulario-linha:has(.dica-prazo:not([hidden])) { padding-bottom: 20px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -4,6 +4,8 @@ from datetime import date, timedelta
 from app.models import Projeto, Tarefa
 from app.models import servicos
 
+AVISO_PRAZO_PASSADO = "Atenção: o prazo informado já passou, então a tarefa aparece como atrasada."
+
 
 def mensagens(client):
     """Mensagens (flash) guardadas na sessão para a próxima página."""
@@ -197,3 +199,73 @@ def test_erro_inesperado_no_banco_nao_mostra_erro_tecnico(client, app, monkeypat
     html = resposta.get_data(as_text=True)
     assert "database is locked" not in html
     assert "Algo deu errado" in html
+
+
+def test_buscar_e_ordenar_tarefas_na_pagina_do_projeto(client, app):
+    """Correção C03: campo de busca e escolha da ordem na página do projeto."""
+    projeto = servicos.criar_projeto("TCC")
+    servicos.criar_tarefa(projeto.id, "Revisar referências")
+    servicos.criar_tarefa(projeto.id, "Escrever introdução")
+
+    html = client.get(f"/projetos/{projeto.id}?busca=revisar&ordem=nome").get_data(as_text=True)
+
+    assert "Revisar referências" in html
+    assert "Escrever introdução" not in html
+    assert 'name="busca"' in html and 'value="revisar"' in html
+    assert '<option value="nome" selected' in html
+
+
+def test_busca_sem_resultado_mostra_mensagem(client, app):
+    projeto = servicos.criar_projeto("TCC")
+    servicos.criar_tarefa(projeto.id, "Escrever introdução")
+
+    html = client.get(f"/projetos/{projeto.id}?busca=xyz").get_data(as_text=True)
+
+    assert "Nenhuma tarefa encontrada para “xyz”." in html
+
+
+def test_filtros_mantem_a_busca_e_a_ordem(client, app):
+    projeto = servicos.criar_projeto("TCC")
+
+    html = client.get(f"/projetos/{projeto.id}?busca=revisar&ordem=nome").get_data(as_text=True)
+
+    assert f"/projetos/{projeto.id}?filtro=atrasadas&amp;busca=revisar&amp;ordem=nome" in html
+
+
+def test_cadastrar_tarefa_com_prazo_passado_avisa_o_usuario(client, app):
+    """Correção C01 (avaliação do Lucas): avisar quando o prazo já passou."""
+    projeto = servicos.criar_projeto("TCC")
+    ontem = (date.today() - timedelta(days=1)).isoformat()
+
+    resposta = client.post(f"/projetos/{projeto.id}/tarefas", data={"titulo": "Atrasada", "prazo": ontem})
+
+    assert resposta.status_code == 302
+    assert Tarefa.query.count() == 1
+    assert AVISO_PRAZO_PASSADO in mensagens(client)
+
+
+def test_editar_tarefa_para_prazo_passado_avisa_o_usuario(client, app):
+    projeto = servicos.criar_projeto("TCC")
+    tarefa = servicos.criar_tarefa(projeto.id, "Tarefa")
+    ontem = (date.today() - timedelta(days=1)).isoformat()
+
+    client.post(f"/tarefas/{tarefa.id}/editar", data={"titulo": "Tarefa", "prazo": ontem})
+
+    assert AVISO_PRAZO_PASSADO in mensagens(client)
+
+
+def test_prazo_hoje_ou_futuro_nao_avisa(client, app):
+    projeto = servicos.criar_projeto("TCC")
+
+    client.post(f"/projetos/{projeto.id}/tarefas", data={"titulo": "Hoje", "prazo": date.today().isoformat()})
+
+    assert AVISO_PRAZO_PASSADO not in mensagens(client)
+
+
+def test_formulario_de_tarefa_tem_aviso_de_prazo_passado_antes_de_salvar(client, app):
+    projeto = servicos.criar_projeto("TCC")
+    tarefa = servicos.criar_tarefa(projeto.id, "Tarefa")
+
+    for url in (f"/projetos/{projeto.id}", f"/tarefas/{tarefa.id}/editar"):
+        html = client.get(url).get_data(as_text=True)
+        assert f'data-hoje="{date.today().isoformat()}"' in html

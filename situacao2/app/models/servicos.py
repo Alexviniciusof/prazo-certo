@@ -130,26 +130,41 @@ def excluir_projeto(projeto_id):
 
 # ---------- tarefas ----------
 
-def _ordem_das_tarefas():
-    """Pendentes antes das concluídas; depois pelo prazo mais próximo; sem prazo por último."""
-    return (
-        (Tarefa.status != PENDENTE),
-        Tarefa.prazo.is_(None),
-        Tarefa.prazo,
-        Tarefa.id,
-    )
+ORDENS = {
+    "situacao": "Pendentes primeiro",
+    "prazo": "Prazo",
+    "nome": "Nome",
+}
+ORDEM_PADRAO = "situacao"
+
+
+def _ordem_das_tarefas(ordem=ORDEM_PADRAO):
+    """situacao: pendentes antes das concluídas, depois pelo prazo; prazo: só pelo prazo; nome: A–Z.
+
+    Em todas, tarefas sem prazo vêm depois das que têm prazo.
+    """
+    por_prazo = (Tarefa.prazo.is_(None), Tarefa.prazo)
+    if ordem == "nome":
+        return (func.lower(Tarefa.titulo), *por_prazo, Tarefa.id)
+    if ordem == "prazo":
+        return (*por_prazo, Tarefa.id)
+    return ((Tarefa.status != PENDENTE), *por_prazo, Tarefa.id)
 
 
 def _filtro_atrasadas(hoje):
     return (Tarefa.status == PENDENTE, Tarefa.prazo.isnot(None), Tarefa.prazo < hoje)
 
 
-def listar_tarefas(projeto_id, apenas_atrasadas=False, hoje=None):
+def listar_tarefas(projeto_id, apenas_atrasadas=False, hoje=None, busca=None, ordem=ORDEM_PADRAO):
     obter_projeto(projeto_id)
     consulta = Tarefa.query.filter(Tarefa.projeto_id == projeto_id)
     if apenas_atrasadas:
         consulta = consulta.filter(*_filtro_atrasadas(hoje or date.today()))
-    return consulta.order_by(*_ordem_das_tarefas()).all()
+    busca = _texto_limpo(busca)
+    if busca:
+        # autoescape: "%" e "_" digitados pelo usuário são procurados como texto.
+        consulta = consulta.filter(Tarefa.titulo.icontains(busca, autoescape=True))
+    return consulta.order_by(*_ordem_das_tarefas(ordem)).all()
 
 
 def listar_tarefas_atrasadas(hoje=None, projeto_id=None):

@@ -3,7 +3,7 @@ from datetime import date
 
 from flask import Blueprint, flash, jsonify, redirect, render_template, request, url_for
 
-from app.controllers.respostas import quer_json
+from app.controllers.respostas import avisar_se_prazo_passou, quer_json
 from app.models import servicos
 from app.models.erros import ErroValidacao
 
@@ -33,6 +33,7 @@ def atualizar(tarefa_id):
         tarefa = servicos.obter_tarefa(tarefa_id)
         return render_template("tarefas/form.html", tarefa=tarefa, dados=dados, erro=erro.mensagem), 400
     flash("Tarefa atualizada com sucesso.", "sucesso")
+    avisar_se_prazo_passou(tarefa)
     return redirect(url_for("projetos.detalhar", projeto_id=tarefa.projeto_id))
 
 

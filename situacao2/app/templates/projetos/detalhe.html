@@ -40,15 +40,36 @@
     </div>
     <div class="campo">
       <label for="prazo">Prazo <span class="opcional">(opcional)</span></label>
-      <input id="prazo" name="prazo" type="date" value="{{ dados_tarefa.get('prazo', '') }}">
+      <input id="prazo" name="prazo" type="date" data-hoje="{{ hoje_iso }}" value="{{ dados_tarefa.get('prazo', '') }}">
     </div>
     <button class="botao botao-principal" type="submit">Adicionar</button>
   </form>
 
-  <nav class="filtros" aria-label="Filtrar tarefas">
-    <a class="filtro {{ 'ativo' if filtro != 'atrasadas' }}" href="{{ url_for('projetos.detalhar', projeto_id=projeto.id) }}">Todas</a>
-    <a class="filtro {{ 'ativo' if filtro == 'atrasadas' }}" href="{{ url_for('projetos.detalhar', projeto_id=projeto.id, filtro='atrasadas') }}">Atrasadas</a>
-  </nav>
+  {# Busca e ordem só entram no endereço quando foram escolhidas, para os links ficarem curtos. #}
+  {% set busca_url = busca or None %}
+  {% set ordem_url = ordem if ordem != 'situacao' else None %}
+  <div class="barra-tarefas">
+    <nav class="filtros" aria-label="Filtrar tarefas">
+      <a class="filtro {{ 'ativo' if filtro != 'atrasadas' }}" href="{{ url_for('projetos.detalhar', projeto_id=projeto.id, busca=busca_url, ordem=ordem_url) }}">Todas</a>
+      <a class="filtro {{ 'ativo' if filtro == 'atrasadas' }}" href="{{ url_for('projetos.detalhar', projeto_id=projeto.id, filtro='atrasadas', busca=busca_url, ordem=ordem_url) }}">Atrasadas</a>
+    </nav>
+
+    <form class="busca" method="get" action="{{ url_for('projetos.detalhar', projeto_id=projeto.id) }}" role="search">
+      {% if filtro == 'atrasadas' %}<input type="hidden" name="filtro" value="atrasadas">{% endif %}
+      <label class="visualmente-oculto" for="busca">Buscar tarefa pelo nome</label>
+      <input id="busca" name="busca" type="search" maxlength="150" placeholder="Buscar tarefa…" value="{{ busca }}">
+      <label class="visualmente-oculto" for="ordem">Ordenar por</label>
+      <select id="ordem" name="ordem" data-enviar-ao-mudar>
+        {% for valor, rotulo in ordens.items() %}
+          <option value="{{ valor }}" {{ 'selected' if valor == ordem }}>Ordem: {{ rotulo }}</option>
+        {% endfor %}
+      </select>
+      <button class="botao" type="submit">Buscar</button>
+      {% if busca %}
+        <a class="botao" href="{{ url_for('projetos.detalhar', projeto_id=projeto.id, filtro=(filtro if filtro == 'atrasadas' else None), ordem=ordem_url) }}">Limpar</a>
+      {% endif %}
+    </form>
+  </div>
 
   {% if tarefas %}
     <ul class="lista-tarefas" {% if filtro == 'atrasadas' %}data-remover-concluidas data-vazio="Nenhuma tarefa atrasada neste projeto. 🎉"{% endif %}>
@@ -56,6 +77,8 @@
         {% include "tarefas/_item.html" %}
       {% endfor %}
     </ul>
+  {% elif busca %}
+    <p class="cartao vazio">Nenhuma tarefa encontrada para “{{ busca }}”.</p>
   {% elif filtro == 'atrasadas' %}
     <p class="cartao vazio">Nenhuma tarefa atrasada neste projeto. 🎉</p>
   {% else %}

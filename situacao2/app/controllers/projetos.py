@@ -3,6 +3,7 @@ from datetime import date
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 
+from app.controllers.respostas import avisar_se_prazo_passou
 from app.models import servicos
 from app.models.erros import ErroValidacao
 
@@ -66,23 +67,33 @@ def excluir(projeto_id):
 def criar_tarefa(projeto_id):
     dados = request.form
     try:
-        servicos.criar_tarefa(projeto_id, dados.get("titulo"), dados.get("prazo"))
+        tarefa = servicos.criar_tarefa(projeto_id, dados.get("titulo"), dados.get("prazo"))
     except ErroValidacao as erro:
         return _pagina_do_projeto(projeto_id, dados_tarefa=dados, erro=erro.mensagem), 400
     flash("Tarefa criada com sucesso.", "sucesso")
+    avisar_se_prazo_passou(tarefa)
     return redirect(url_for("projetos.detalhar", projeto_id=projeto_id))
 
 
 def _pagina_do_projeto(projeto_id, dados_tarefa=None, erro=None):
     hoje = date.today()
     filtro = request.args.get("filtro", "todas")
+    busca = request.args.get("busca", "").strip()
+    ordem = request.args.get("ordem", servicos.ORDEM_PADRAO)
+    if ordem not in servicos.ORDENS:
+        ordem = servicos.ORDEM_PADRAO
     projeto = servicos.obter_projeto(projeto_id)
-    tarefas = servicos.listar_tarefas(projeto_id, apenas_atrasadas=(filtro == "atrasadas"), hoje=hoje)
+    tarefas = servicos.listar_tarefas(
+        projeto_id, apenas_atrasadas=(filtro == "atrasadas"), hoje=hoje, busca=busca, ordem=ordem
+    )
     return render_template(
         "projetos/detalhe.html",
         projeto=projeto,
         tarefas=tarefas,
         filtro=filtro,
+        busca=busca,
+        ordem=ordem,
+        ordens=servicos.ORDENS,
         hoje=hoje,
         dados_tarefa=dados_tarefa or {},
         erro=erro,

@@ -211,3 +211,66 @@ class TestAtrasadas:
         servicos.criar_tarefa(projeto.id, "No prazo", hoje + timedelta(days=1))
 
         assert projeto.total_atrasadas(hoje) == 2
+
+
+class TestBuscaEOrdem:
+    """Correção C03 (avaliação do Pedro): buscar tarefa pelo nome e escolher a ordem da lista."""
+
+    def test_buscar_tarefa_pelo_titulo(self, projeto):
+        alvo = servicos.criar_tarefa(projeto.id, "Revisar referências")
+        servicos.criar_tarefa(projeto.id, "Escrever introdução")
+
+        resultado = servicos.listar_tarefas(projeto.id, busca="referên")
+
+        assert [t.id for t in resultado] == [alvo.id]
+
+    def test_busca_ignora_maiusculas_e_espacos(self, projeto):
+        alvo = servicos.criar_tarefa(projeto.id, "Revisar Referências")
+
+        assert [t.id for t in servicos.listar_tarefas(projeto.id, busca="  revisar  ")] == [alvo.id]
+
+    def test_busca_trata_caracteres_especiais_como_texto(self, projeto):
+        servicos.criar_tarefa(projeto.id, "Concluir 50% do texto")
+        servicos.criar_tarefa(projeto.id, "Concluir o resumo")
+
+        assert [t.titulo for t in servicos.listar_tarefas(projeto.id, busca="50%")] == ["Concluir 50% do texto"]
+
+    def test_busca_vazia_mostra_todas(self, projeto):
+        servicos.criar_tarefa(projeto.id, "A")
+        servicos.criar_tarefa(projeto.id, "B")
+
+        assert len(servicos.listar_tarefas(projeto.id, busca="   ")) == 2
+
+    def test_busca_junto_com_filtro_de_atrasadas(self, projeto, hoje):
+        alvo = servicos.criar_tarefa(projeto.id, "Revisar atrasada", hoje - timedelta(days=1))
+        servicos.criar_tarefa(projeto.id, "Revisar no prazo", hoje + timedelta(days=1))
+
+        resultado = servicos.listar_tarefas(projeto.id, apenas_atrasadas=True, hoje=hoje, busca="revisar")
+
+        assert [t.id for t in resultado] == [alvo.id]
+
+    def test_ordenar_por_nome(self, projeto):
+        servicos.criar_tarefa(projeto.id, "beta")
+        servicos.criar_tarefa(projeto.id, "Alfa")
+        servicos.criar_tarefa(projeto.id, "Gama")
+
+        assert [t.titulo for t in servicos.listar_tarefas(projeto.id, ordem="nome")] == ["Alfa", "beta", "Gama"]
+
+    def test_ordenar_por_prazo_mistura_pendentes_e_concluidas(self, projeto):
+        sem_prazo = servicos.criar_tarefa(projeto.id, "Sem prazo")
+        depois = servicos.criar_tarefa(projeto.id, "Depois", date(2026, 12, 1))
+        feita = servicos.criar_tarefa(projeto.id, "Feita", date(2026, 10, 1))
+        servicos.concluir_tarefa(feita.id)
+
+        ordem = [t.id for t in servicos.listar_tarefas(projeto.id, ordem="prazo")]
+
+        assert ordem == [feita.id, depois.id, sem_prazo.id]
+
+    def test_ordem_desconhecida_usa_a_padrao(self, projeto):
+        feita = servicos.criar_tarefa(projeto.id, "Feita", date(2026, 10, 1))
+        pendente = servicos.criar_tarefa(projeto.id, "Pendente", date(2026, 12, 1))
+        servicos.concluir_tarefa(feita.id)
+
+        ordem = [t.id for t in servicos.listar_tarefas(projeto.id, ordem="qualquer")]
+
+        assert ordem == [pendente.id, feita.id]

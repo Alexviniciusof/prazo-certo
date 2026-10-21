@@ -92,6 +92,28 @@
     atualizar();
   });
 
+  // ---------- aviso de prazo que já passou (antes de salvar) ----------
+  document.querySelectorAll("input[type=date][data-hoje]").forEach((campo) => {
+    const dica = document.createElement("p");
+    dica.className = "dica-prazo";
+    dica.setAttribute("aria-live", "polite");
+    const atualizar = () => {
+      // Datas no formato AAAA-MM-DD podem ser comparadas como texto.
+      const passou = campo.value !== "" && campo.value < campo.dataset.hoje;
+      dica.textContent = passou ? "Esse prazo já passou: a tarefa vai aparecer como atrasada." : "";
+      dica.hidden = !passou;
+    };
+    campo.insertAdjacentElement("afterend", dica);
+    campo.addEventListener("input", atualizar);
+    campo.addEventListener("change", atualizar);
+    atualizar();
+  });
+
+  // ---------- ordem da lista: aplica assim que o usuário escolhe ----------
+  document.querySelectorAll("[data-enviar-ao-mudar]").forEach((campo) => {
+    campo.addEventListener("change", () => campo.form.submit());
+  });
+
   // ---------- concluir / reabrir tarefa sem recarregar ----------
   function atualizarResumo(dados) {
     const resumo = document.getElementById("resumo-projeto");

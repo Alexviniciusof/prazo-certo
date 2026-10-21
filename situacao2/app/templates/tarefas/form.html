@@ -12,7 +12,7 @@
            value="{{ dados.get('titulo', '') }}">
 
     <label for="prazo">Prazo <span class="opcional">(opcional)</span></label>
-    <input id="prazo" name="prazo" type="date" value="{{ dados.get('prazo', '') }}">
+    <input id="prazo" name="prazo" type="date" data-hoje="{{ hoje_iso }}" value="{{ dados.get('prazo', '') }}">
 
     <div class="acoes">
       <button class="botao botao-principal" type="submit">Salvar alterações</button>
